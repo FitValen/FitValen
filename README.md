@@ -1,6 +1,6 @@
 # FitValen
 
-Primera versión navegable de una aplicación web de entrenamiento, nutrición y seguimiento personal para móvil y ordenador.
+Primera versión navegable de una aplicación web de entrenamiento, nutrición y seguimiento personal para móvil y ordenador. Prueba AUTO
 
 ## Incluye
 
