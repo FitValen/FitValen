@@ -39,6 +39,14 @@ openssl rand -base64 32
 
 Guarda el resultado en `FITVALEN_ENCRYPTION_KEY` y completa los dos PIN dentro de `.env`.
 
+También puedes preparar automáticamente un entorno local nuevo indicando el PIN del administrador:
+
+```bash
+npm run setup-access -- 3434
+```
+
+El comando crea `.env` con permisos restringidos, genera la clave de cifrado y un PIN aleatorio para la cuenta de miembro. Por seguridad, se detiene sin modificar nada si `.env` ya existe. Después podrás entrar con el usuario `admin` y el PIN indicado.
+
 ## Desplegar en una VPS con Docker
 
 La VPS necesita Docker, Docker Compose, un dominio y HTTPS. Las cookies persistentes son seguras en producción únicamente detrás de HTTPS.
