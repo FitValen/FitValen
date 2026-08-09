@@ -6,6 +6,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "setup-access": "node scripts/setup-access.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
