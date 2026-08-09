@@ -16,6 +16,9 @@ export type FitValenState = {
     weightsKg: number[];
     repetitions: number[];
   };
+  routines: Array<{ id: string; name: string; focus: string; day: string; exercises: number }>;
+  mealPlans: Array<{ id: string; name: string; goal: string; calories: number; meals: number }>;
+  scheduled: Array<{ id: string; title: string; kind: "workout" | "meal"; day: string; time: string }>;
   activity: Array<{
     id: string;
     type: "water" | "workout" | "weight" | "meal";
@@ -48,6 +51,9 @@ export function createDefaultState(
       weightsKg: [70, 70, 70, 70],
       repetitions: [8, 8, 8, 8],
     },
+    routines: [],
+    mealPlans: [],
+    scheduled: [],
     activity: [],
     updatedAt: new Date().toISOString(),
   };

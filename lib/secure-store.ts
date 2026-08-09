@@ -270,6 +270,10 @@ function bounded(value: unknown, fallback: number, maximum: number): number {
     : fallback;
 }
 
+function textValue(value: unknown, fallback = "", maximum = 120): string {
+  return typeof value === "string" ? value.trim().slice(0, maximum) : fallback;
+}
+
 function sanitizeState(value: FitValenState, user: StoredUser): FitValenState {
   const fallback = user.state;
   const sets = Array.isArray(value?.workout?.completedSets)
@@ -294,6 +298,27 @@ function sanitizeState(value: FitValenState, user: StoredUser): FitValenState {
       dailyGoalMl: Math.round(bounded(value?.hydration?.dailyGoalMl, fallback.hydration.dailyGoalMl, 20_000)),
     },
     workout: { completedSets: sets, weightsKg: weights, repetitions },
+    routines: Array.isArray(value?.routines) ? value.routines.slice(-100).map((routine) => ({
+      id: textValue(routine?.id, randomUUID(), 80),
+      name: textValue(routine?.name, "Rutina sin nombre"),
+      focus: textValue(routine?.focus, "General"),
+      day: textValue(routine?.day, "SIN ASIGNAR", 30),
+      exercises: Math.round(bounded(routine?.exercises, 1, 20)),
+    })) : (fallback.routines ?? []),
+    mealPlans: Array.isArray(value?.mealPlans) ? value.mealPlans.slice(-100).map((plan) => ({
+      id: textValue(plan?.id, randomUUID(), 80),
+      name: textValue(plan?.name, "Plan sin nombre"),
+      goal: textValue(plan?.goal, "Mantenimiento"),
+      calories: Math.round(bounded(plan?.calories, 2000, 10_000)),
+      meals: Math.round(bounded(plan?.meals, 1, 20)),
+    })) : (fallback.mealPlans ?? []),
+    scheduled: Array.isArray(value?.scheduled) ? value.scheduled.slice(-200).map((event) => ({
+      id: textValue(event?.id, randomUUID(), 80),
+      title: textValue(event?.title, "Actividad"),
+      kind: event?.kind === "meal" ? "meal" as const : "workout" as const,
+      day: textValue(event?.day, "", 20),
+      time: textValue(event?.time, "", 10),
+    })) : (fallback.scheduled ?? []),
     activity: Array.isArray(value?.activity)
       ? value.activity.slice(-200).filter((entry) =>
           entry && ["water", "workout", "weight", "meal"].includes(entry.type),
