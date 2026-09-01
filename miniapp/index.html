@@ -3,58 +3,177 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0b0d11">
+<meta name="theme-color" content="#0a0c10">
 <title>FitValen</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-:root{--bg:#0b0d11;--panel:#151922;--card:#1b202b;--text:#f5f7fa;--muted:#8d96a8;--accent:#64dc8a;--line:rgba(255,255,255,.08);--safe:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding-bottom:calc(76px + var(--safe));min-height:100vh}button{font:inherit}.app{max-width:720px;margin:auto;padding:14px}.top{display:flex;justify-content:space-between;align-items:center;padding:8px 0 14px}.brand{font-weight:900;letter-spacing:.08em}.status{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:0}.badge{font-size:11px;font-weight:800;color:var(--accent);border:1px solid rgba(100,220,138,.28);background:rgba(100,220,138,.08);padding:7px 9px;border-radius:999px}.screen{display:none}.screen.on{display:block}.hero,.card{background:var(--panel);border:1px solid var(--line);border-radius:20px}.hero{padding:19px;margin-bottom:10px}.card{padding:14px;margin-bottom:9px}.ey{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}.big{font-size:36px;font-weight:900;line-height:1.05;margin:8px 0}.stat{font-size:21px;font-weight:900;margin-top:6px}.small{font-size:12px;color:var(--muted);line-height:1.45}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.section{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:850;margin:17px 2px 8px}.item{padding:11px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.item b{display:block;font-size:14px}.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(11,13,17,.96);border-top:1px solid var(--line);padding:7px 8px calc(7px + var(--safe));z-index:20}.navin{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr)}.nav button{border:0;background:transparent;color:var(--muted);min-height:52px;border-radius:13px;font-size:11px;font-weight:800}.nav button span{display:block;font-size:20px;margin-bottom:2px}.nav button.on{color:var(--accent);background:rgba(100,220,138,.08)}.error{border-color:rgba(255,109,103,.35)}.loading{opacity:.65}@media(max-width:380px){.app{padding-left:11px;padding-right:11px}.big{font-size:32px}.grid3{grid-template-columns:1fr}}
+:root{
+  --bg:#0a0c10;--bg2:#0f1218;--panel:#141922;--panel2:#1a202b;--card:#1d2430;
+  --text:#f6f8fb;--muted:#8e98a8;--soft:#b9c1cc;--accent:#66e08f;--accent2:#9af0b7;
+  --danger:#ff746d;--warning:#f7c65d;--line:rgba(255,255,255,.075);--safe:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+body{padding-bottom:calc(82px + var(--safe));background:radial-gradient(circle at 50% -10%,rgba(102,224,143,.09),transparent 32%),var(--bg)}
+button{font:inherit}
+.app{max-width:720px;margin:0 auto;padding:12px 14px 28px}
+.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:10px 0 13px;background:linear-gradient(var(--bg) 78%,rgba(10,12,16,0))}
+.brandrow{display:flex;align-items:center;gap:10px}
+.logo{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,var(--accent),#41b96b);color:#071109;font-size:18px;font-weight:950;box-shadow:0 8px 26px rgba(102,224,143,.18)}
+.brand{font-size:15px;font-weight:950;letter-spacing:.08em}
+.status{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:0}
+.readonly{font-size:10px;font-weight:900;letter-spacing:.06em;padding:7px 9px;border-radius:999px;border:1px solid rgba(102,224,143,.25);background:rgba(102,224,143,.08);color:var(--accent2)}
+.screen{display:none}.screen.on{display:block}
+.hero,.card,.daycard,.mealcard{border:1px solid var(--line);background:linear-gradient(145deg,var(--panel2),var(--panel));border-radius:22px}
+.hero{padding:20px;margin-bottom:10px;overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;width:170px;height:170px;border-radius:50%;right:-85px;top:-105px;background:rgba(102,224,143,.09);pointer-events:none}
+.card{padding:15px;margin-bottom:9px}
+.ey{font-size:10px;text-transform:uppercase;letter-spacing:.11em;color:var(--muted);font-weight:900}
+.big{font-size:39px;line-height:1;font-weight:950;margin:9px 0 6px;letter-spacing:-.045em}
+.unit{font-size:13px;font-weight:800;color:var(--muted);letter-spacing:0}
+.small{font-size:12px;line-height:1.45;color:var(--muted)}
+.soft{color:var(--soft)}
+.stat{font-size:22px;font-weight:950;letter-spacing:-.025em}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sectionhead{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:20px 2px 9px}
+.sectiontitle{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.08em;color:var(--soft)}
+.sectionmeta{font-size:11px;color:var(--muted);text-align:right}
+.pill{display:inline-flex;align-items:center;gap:5px;min-height:27px;padding:5px 9px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid var(--line);font-size:10px;font-weight:900;color:var(--soft)}
+.pill.good{color:var(--accent2);border-color:rgba(102,224,143,.2);background:rgba(102,224,143,.07)}
+.pill.warn{color:var(--warning);border-color:rgba(247,198,93,.2);background:rgba(247,198,93,.07)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.metric{padding:14px 13px;background:var(--panel);border:1px solid var(--line);border-radius:18px;min-width:0}
+.metric .stat{font-size:20px}
+.metric .small{margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.progressbar{height:7px;border-radius:99px;overflow:hidden;background:rgba(255,255,255,.055);margin-top:13px}
+.progressbar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.quick .card{margin:0;min-height:112px;display:flex;flex-direction:column;justify-content:space-between}
+.quickicon{font-size:24px;margin-bottom:10px}
+.quickvalue{font-size:16px;font-weight:900;line-height:1.25}
+.brain{border-color:rgba(102,224,143,.18);background:linear-gradient(145deg,rgba(102,224,143,.09),var(--panel))}
+.braintext{font-size:14px;font-weight:850;line-height:1.45;margin-top:8px}
+.mealgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mealcard{padding:14px;min-height:102px}
+.mealicon{font-size:23px}
+.mealname{font-size:14px;font-weight:900;margin-top:10px;text-transform:capitalize}
+.mealmeta{font-size:11px;color:var(--muted);margin-top:3px}
+.foodrow{padding:12px 0;border-bottom:1px solid var(--line)}
+.foodrow:last-child{border-bottom:0}
+.foodname{font-size:14px;font-weight:850}
+.foodmeta{font-size:11px;color:var(--muted);margin-top:4px}
+.daychips{display:flex;gap:7px;overflow:auto;padding:1px 1px 6px;scrollbar-width:none}
+.daychips::-webkit-scrollbar{display:none}
+.daychip{flex:0 0 auto;min-width:62px;min-height:42px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--soft);font-weight:900}
+.daychip.on{background:var(--accent);border-color:var(--accent);color:#071109}
+.daycard{padding:16px;margin-bottom:9px}
+.exercise{padding:13px 0;border-bottom:1px solid var(--line)}
+.exercise:last-child{border-bottom:0}
+.excode{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:27px;padding:0 8px;border-radius:9px;background:rgba(255,255,255,.055);border:1px solid var(--line);font-size:11px;font-weight:950;color:var(--accent2);margin-right:8px}
+.exname{font-size:14px;font-weight:900;line-height:1.3}
+.expresc{font-size:11px;color:var(--soft);margin-top:6px}
+.exlast{font-size:11px;color:var(--muted);line-height:1.45;margin-top:4px}
+.activebanner{padding:14px;border-radius:18px;margin-bottom:10px;border:1px solid rgba(102,224,143,.22);background:rgba(102,224,143,.075)}
+.trend{font-size:12px;font-weight:850;margin-top:7px}
+.progressday{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
+.progressday:last-child{border-bottom:0}
+.daynum{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.055);display:flex;align-items:center;justify-content:center;font-weight:950}
+.pstats{font-size:11px;color:var(--muted);margin-top:4px}
+.empty{padding:24px 10px;text-align:center;color:var(--muted);font-size:12px}
+.skeleton{height:112px;border-radius:22px;background:linear-gradient(90deg,var(--panel) 25%,var(--panel2) 50%,var(--panel) 75%);background-size:200% 100%;animation:sk 1.4s linear infinite;border:1px solid var(--line);margin-bottom:10px}
+@keyframes sk{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.error{border-color:rgba(255,116,109,.32);background:rgba(255,116,109,.06)}
+.loading{pointer-events:none}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(10,12,16,.96);border-top:1px solid var(--line);padding:7px 8px calc(7px + var(--safe))}
+.navin{max-width:720px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:3px}
+.nav button{border:0;background:transparent;color:var(--muted);min-height:57px;border-radius:15px;font-size:10px;font-weight:900;letter-spacing:.01em}
+.nav button span{display:block;font-size:21px;margin-bottom:2px;filter:saturate(.8)}
+.nav button.on{color:var(--accent2);background:rgba(102,224,143,.075)}
+@media(max-width:390px){.app{padding-left:11px;padding-right:11px}.big{font-size:35px}.grid3{gap:6px}.metric{padding-left:10px;padding-right:10px}.metric .stat{font-size:18px}.mealgrid{gap:7px}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <div class="top"><div class="brand">FITVALEN<div class="status" id="status">Conectando…</div></div><div class="badge">SOLO LECTURA</div></div>
-  <section class="screen on" id="screen-home"><div id="home"><div class="card">Cargando…</div></div></section>
-  <section class="screen" id="screen-diet"><div id="diet"><div class="card">Pulsa Dieta para cargar.</div></div></section>
-  <section class="screen" id="screen-work"><div id="work"><div class="card">Pulsa Entreno para cargar.</div></div></section>
-  <section class="screen" id="screen-progress"><div id="progress"><div class="card">Pulsa Progreso para cargar.</div></div></section>
+  <header class="topbar">
+    <div class="brandrow">
+      <div class="logo">FV</div>
+      <div><div class="brand">FITVALEN</div><div class="status" id="status">Conectando…</div></div>
+    </div>
+    <div class="readonly">SOLO LECTURA</div>
+  </header>
+
+  <section class="screen on" id="screen-home"><div id="home"><div class="skeleton"></div><div class="skeleton"></div></div></section>
+  <section class="screen" id="screen-diet"><div id="diet"><div class="skeleton"></div><div class="skeleton"></div></div></section>
+  <section class="screen" id="screen-work"><div id="work"><div class="skeleton"></div><div class="skeleton"></div></div></section>
+  <section class="screen" id="screen-progress"><div id="progress"><div class="skeleton"></div><div class="skeleton"></div></div></section>
 </div>
+
 <nav class="nav"><div class="navin">
   <button class="on" data-tab="home"><span>⚡</span>Hoy</button>
   <button data-tab="diet"><span>🍽️</span>Dieta</button>
   <button data-tab="work"><span>🏋️</span>Entreno</button>
   <button data-tab="progress"><span>📈</span>Progreso</button>
 </div></nav>
+
 <script>
+function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 window.onerror=function(message,source,line,column){
   var s=document.getElementById('status');
   var h=document.getElementById('home');
   if(s){s.textContent='Error JavaScript';}
-  if(h){h.innerHTML='<div class="card error"><b>No se pudo iniciar FitValen.</b><div class="small" style="margin-top:8px">'+escapeHtml(String(message||'Error'))+' · línea '+String(line||'?')+':'+String(column||'?')+'</div></div>';}
+  if(h){h.innerHTML='<div class="card error"><div class="ey">Error</div><div class="braintext">No se pudo iniciar FitValen.</div><div class="small" style="margin-top:7px">'+escapeHtml(String(message||'Error'))+' · línea '+String(line||'?')+':'+String(column||'?')+'</div></div>';}
 };
-function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];});}
 </script>
+
 <script>
 (function(){
   var tg=(window.Telegram&&window.Telegram.WebApp)?window.Telegram.WebApp:null;
   var initData='';
-  var state={home:null,diet:null,work:null,progress:null,loaded:{home:false,diet:false,work:false,progress:false}};
+  var state={home:null,diet:null,work:null,progress:null,loaded:{home:false,diet:false,work:false,progress:false},selectedDay:1};
   var app=document.getElementById('app');
   var status=document.getElementById('status');
+  var mealInfo={
+    'ayunas':['🌅','Ayunas'],'desayuno':['🍳','Desayuno'],'almuerzo':['🥪','Almuerzo'],
+    'comida':['🍽️','Comida'],'merienda':['🥛','Merienda'],'post-entreno':['🍍','Post-entreno'],
+    'cena':['🌙','Cena'],'postre':['🍓','Postre'],'snacks':['🍫','Snacks'],
+    'salsas':['🥫','Salsas'],'antes de dormir':['💊','Antes de dormir']
+  };
 
   function get(id){return document.getElementById(id);}
   function num(v){var x=parseFloat(v);return isNaN(x)?0:x;}
   function fmt(v,d){return num(v).toLocaleString('es-ES',{maximumFractionDigits:d==null?1:d});}
+  function cap(v){v=String(v==null?'':v);return v.length?v.charAt(0).toUpperCase()+v.slice(1):v;}
   function setBusy(on){if(on){app.className='app loading';}else{app.className='app';}}
-  function showError(text){status.textContent='Error de conexión';get('home').innerHTML='<div class="card error"><b>No se pudo conectar.</b><div class="small" style="margin-top:8px">'+escapeHtml(text)+'</div></div>';}
+  function showError(text){
+    status.textContent='Error de conexión';
+    get('home').innerHTML='<div class="card error"><div class="ey">Conexión</div><div class="braintext">No se pudo conectar.</div><div class="small" style="margin-top:7px">'+escapeHtml(text)+'</div></div>';
+  }
+  function brainText(b){
+    if(!b){return 'Datos preparados.';}
+    if(typeof b==='string'){return b;}
+    if(b.headline){return String(b.headline);}
+    if(b.verdict){return String(b.verdict);}
+    if(b.message){return String(b.message);}
+    if(b.summary){return String(b.summary);}
+    return 'Datos preparados.';
+  }
+  function statusPill(s){
+    if(s&&s.status==='closed'){return '<span class="pill good"><i class="dot"></i>Cerrado</span>';}
+    if(s&&s.id){return '<span class="pill good"><i class="dot"></i>En curso</span>';}
+    return '<span class="pill warn"><i class="dot"></i>Sin iniciar</span>';
+  }
 
   if(tg){
     try{tg.ready();tg.expand();}catch(ignore){}
     try{initData=tg.initData||'';}catch(ignore2){initData='';}
+    try{tg.setHeaderColor('#0a0c10');tg.setBackgroundColor('#0a0c10');}catch(ignore3){}
   }
+
   if(!initData){
     status.textContent='Abre desde Telegram';
-    get('home').innerHTML='<div class="hero"><div class="ey">FitValen Mini App</div><div class="stat">Ábrela desde el botón del bot.</div><div class="small" style="margin-top:8px">Telegram debe entregar una sesión firmada para poder consultar tus datos.</div></div>';
+    get('home').innerHTML='<div class="hero"><div class="ey">FitValen Mini App</div><div class="big" style="font-size:27px">Sesión no disponible</div><div class="small">Abre FitValen desde el botón del bot para recibir una sesión firmada de Telegram.</div></div>';
     return;
   }
 
@@ -70,10 +189,11 @@ function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/
   }
 
   function load(name,renderer){
+    var key=name==='workouts'?'work':name;
     setBusy(true);
     return api(name).then(function(data){
-      state[name==='workouts'?'work':name]=data;
-      state.loaded[name==='workouts'?'work':name]=true;
+      state[key]=data;
+      state.loaded[key]=true;
       renderer(data);
       status.textContent='Conectado · lectura segura';
       setBusy(false);
@@ -87,66 +207,177 @@ function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/
   function renderHome(h){
     var s=h&&h.session?h.session:{};
     var k=num(s.calories_total),p=num(s.protein_g),c=num(s.carbs_g),f=num(s.fat_g);
-    var dayState=s.status==='closed'?'Día cerrado':(s.id?'Día en curso':'Sin iniciar');
+    var free=!!s.full_free_day;
     var workout='Sin entrenamiento';
-    if(h&&h.activeWorkout&&h.activeWorkout.workout){workout='Día '+escapeHtml(h.activeWorkout.workout.workout_day)+' · en curso';}
-    else if(h&&h.lastWorkout){workout='Día '+escapeHtml(h.lastWorkout.workout_day)+' · '+escapeHtml(h.lastWorkout.status||'');}
+    var workoutSub='No hay sesión activa';
     var weight=h&&h.latestWeight?fmt(h.latestWeight.weight_kg,2)+' kg':'—';
-    get('home').innerHTML='<div class="hero"><div class="ey">Hoy · '+escapeHtml(h.date||'')+'</div><div class="big">'+Math.round(k)+' <span style="font-size:14px;color:var(--muted)">kcal</span></div><div class="small">'+escapeHtml(dayState)+'</div></div>'+
-      '<div class="grid3"><div class="card"><div class="stat">'+fmt(p,1)+'</div><div class="small">Proteína g</div></div><div class="card"><div class="stat">'+fmt(c,1)+'</div><div class="small">Hidratos g</div></div><div class="card"><div class="stat">'+fmt(f,1)+'</div><div class="small">Grasas g</div></div></div>'+
-      '<div class="grid2"><div class="card"><div class="ey">🏋️ Entrenamiento</div><div class="stat" style="font-size:16px">'+workout+'</div></div><div class="card"><div class="ey">⚖️ Peso</div><div class="stat">'+weight+'</div></div></div>'+
-      '<div class="card"><div class="ey">🍽️ Registros hoy</div><div class="stat">'+String(h&&h.foodCount?h.foodCount:0)+'</div></div>';
+    var date=h&&h.date?h.date:'';
+    if(h&&h.activeWorkout&&h.activeWorkout.workout){
+      workout='Día '+escapeHtml(h.activeWorkout.workout.workout_day)+' · en curso';
+      if(h.activeWorkout.exercise){workoutSub=escapeHtml(h.activeWorkout.exercise.exercise_code)+'. '+escapeHtml(h.activeWorkout.exercise.exercise_name||'');}
+      else{workoutSub='Sesión activa';}
+    }else if(h&&h.lastWorkout){
+      workout='Día '+escapeHtml(h.lastWorkout.workout_day)+' · '+escapeHtml(h.lastWorkout.status||'');
+      workoutSub='Última sesión de hoy';
+    }
+    var kcalDisplay=free?'DÍA LIBRE':Math.round(k)+' <span class="unit">kcal</span>';
+    var progress=Math.min(100,Math.max(0,k/18));
+    var html='<div class="hero"><div class="row"><div><div class="ey">Hoy · '+escapeHtml(date)+'</div><div class="big">'+kcalDisplay+'</div><div class="small">'+(free?'Kcal y macros no contabilizados.':'Resumen nutricional del día')+'</div></div>'+statusPill(s)+'</div>';
+    if(!free){html+='<div class="progressbar"><i style="width:'+String(progress)+'%"></i></div>';}
+    html+='</div>';
+    html+='<div class="grid3">'+
+      '<div class="metric"><div class="ey">Proteína</div><div class="stat">'+fmt(p,1)+'</div><div class="small">gramos</div></div>'+
+      '<div class="metric"><div class="ey">Hidratos</div><div class="stat">'+fmt(c,1)+'</div><div class="small">gramos</div></div>'+
+      '<div class="metric"><div class="ey">Grasas</div><div class="stat">'+fmt(f,1)+'</div><div class="small">gramos</div></div>'+
+      '</div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">Tu día</div><div class="sectionmeta">Información actual</div></div>';
+    html+='<div class="quick">'+
+      '<div class="card"><div><div class="quickicon">🏋️</div><div class="ey">Entrenamiento</div></div><div><div class="quickvalue">'+workout+'</div><div class="small" style="margin-top:5px">'+workoutSub+'</div></div></div>'+
+      '<div class="card"><div><div class="quickicon">⚖️</div><div class="ey">Peso</div></div><div><div class="quickvalue">'+weight+'</div><div class="small" style="margin-top:5px">'+(h&&h.latestWeight?escapeHtml(h.latestWeight.entry_date||'Último registro'):'Sin registros')+'</div></div></div>'+
+      '<div class="card"><div><div class="quickicon">🍽️</div><div class="ey">Alimentación</div></div><div><div class="quickvalue">'+String(h&&h.foodCount?h.foodCount:0)+' registros</div><div class="small" style="margin-top:5px">Comidos hoy</div></div></div>'+
+      '<div class="card"><div><div class="quickicon">🧠</div><div class="ey">Estado</div></div><div><div class="quickvalue">'+(s.status==='closed'?'Día cerrado':s.id?'En marcha':'Pendiente')+'</div><div class="small" style="margin-top:5px">Estado operativo</div></div></div>'+
+      '</div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">FitValen ahora</div></div>';
+    html+='<div class="card brain"><div class="ey">⚡ Lectura inteligente</div><div class="braintext">'+escapeHtml(brainText(h?h.brain:null))+'</div></div>';
+    get('home').innerHTML=html;
+  }
+
+  function countBySlot(list,field){
+    var out={},i,key;
+    for(i=0;i<list.length;i++){key=String(list[i][field]||'otros');out[key]=(out[key]||0)+1;}
+    return out;
   }
 
   function renderDiet(d){
     var s=d&&d.session?d.session:{};
     var foods=d&&d.foods?d.foods:[];
     var blocks=d&&d.blocks?d.blocks:[];
-    var html='<div class="hero"><div class="ey">Dieta</div><div class="big">'+Math.round(num(s.calories_total))+' <span style="font-size:14px;color:var(--muted)">kcal</span></div><div class="small">'+(s.diet_status==='closed'?'Cerrada':'Abierta')+'</div></div>';
-    html+='<div class="section">Bloques del plan</div><div class="card">';
-    if(!blocks.length){html+='<div class="small">Sin bloques disponibles.</div>';}
-    for(var i=0;i<blocks.length;i++){html+='<div class="item"><b>'+escapeHtml(blocks[i].slot||'')+'</b><div class="small">Plan vigente disponible</div></div>';}
-    html+='</div><div class="section">Comido hoy</div><div class="card">';
-    if(!foods.length){html+='<div class="small">Sin alimentos registrados.</div>';}
-    for(var j=0;j<foods.length;j++){html+='<div class="item"><b>'+escapeHtml(foods[j].product_name||'')+'</b><div class="small">'+fmt(foods[j].quantity,1)+' '+escapeHtml(foods[j].unit||'')+' · '+Math.round(num(foods[j].calories))+' kcal</div></div>';}
+    var selections=d&&d.selections?d.selections:[];
+    var foodCounts=countBySlot(foods,'meal_slot');
+    var selectionCounts=countBySlot(selections,'meal_slot');
+    var html='<div class="hero"><div class="row"><div><div class="ey">Alimentación</div><div class="big">'+Math.round(num(s.calories_total))+' <span class="unit">kcal</span></div><div class="small">'+fmt(s.protein_g,1)+' P · '+fmt(s.carbs_g,1)+' C · '+fmt(s.fat_g,1)+' G</div></div><span class="pill '+(s.diet_status==='closed'?'good':'')+'"><i class="dot"></i>'+(s.diet_status==='closed'?'Cerrada':'Abierta')+'</span></div></div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">Plan de hoy</div><div class="sectionmeta">'+String(foods.length)+' registros</div></div>';
+    html+='<div class="mealgrid">';
+    if(!blocks.length){html+='<div class="card"><div class="small">Sin bloques disponibles.</div></div>';}
+    for(var i=0;i<blocks.length;i++){
+      var slot=String(blocks[i].slot||'otros');
+      var info=mealInfo[slot]||['🍴',cap(slot)];
+      var cnt=(foodCounts[slot]||selectionCounts[slot]||0);
+      html+='<div class="mealcard"><div class="row"><div class="mealicon">'+info[0]+'</div>'+(cnt?'<span class="pill good">'+String(cnt)+'</span>':'<span class="pill">Plan</span>')+'</div><div class="mealname">'+escapeHtml(info[1])+'</div><div class="mealmeta">'+(cnt?String(cnt)+' registro'+(cnt===1?'':'s'):'Opciones disponibles')+'</div></div>';
+    }
+    html+='</div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">Comido hoy</div><div class="sectionmeta">'+Math.round(num(s.calories_total))+' kcal</div></div>';
+    html+='<div class="card">';
+    if(!foods.length){html+='<div class="empty">Todavía no hay alimentos registrados.</div>';}
+    for(var j=0;j<foods.length;j++){
+      var fs=String(foods[j].meal_slot||'');
+      var fi=mealInfo[fs]||['🍴',cap(fs)];
+      html+='<div class="foodrow"><div class="row"><div class="foodname">'+escapeHtml(foods[j].product_name||'Alimento')+'</div><span class="pill">'+fi[0]+' '+escapeHtml(fi[1])+'</span></div><div class="foodmeta">'+fmt(foods[j].quantity,1)+' '+escapeHtml(foods[j].unit||'')+' · '+Math.round(num(foods[j].calories))+' kcal · '+fmt(foods[j].protein_g,1)+' P · '+fmt(foods[j].carbs_g,1)+' C · '+fmt(foods[j].fat_g,1)+' G</div></div>';
+    }
     html+='</div>';
     get('diet').innerHTML=html;
   }
 
-  function groupLatest(plan,lastSets){
-    var out={};
-    var i;
-    for(i=0;i<lastSets.length;i++){var code=String(lastSets[i].exercise_code||'');if(!out[code]){out[code]=[];}out[code].push(lastSets[i]);}
-    var html='';
-    for(i=0;i<plan.length;i++){
-      var e=plan[i],sets=out[String(e.exercise_code||'')]||[];
-      var last=[];
-      for(var j=0;j<sets.length;j++){last.push((num(sets[j].weight_kg)?fmt(sets[j].weight_kg,2)+' kg × ':'')+String(sets[j].reps||''));}
-      html+='<div class="item"><b>'+escapeHtml(e.exercise_code)+'. '+escapeHtml(e.exercise_name)+'</b><div class="small">'+escapeHtml(e.prescription||'')+(last.length?' · Última: '+escapeHtml(last.join(' · ')):'')+'</div></div>';
+  function setsByExercise(lastSets){
+    var out={},i,code;
+    for(i=0;i<lastSets.length;i++){
+      code=String(lastSets[i].exercise_code||'');
+      if(!out[code]){out[code]=[];}
+      out[code].push(lastSets[i]);
     }
-    return html;
+    return out;
+  }
+
+  function lastSetsText(sets){
+    var out=[],i,s,label;
+    for(i=0;i<sets.length;i++){
+      s=sets[i];
+      label='';
+      if(num(s.weight_kg)){label+=fmt(s.weight_kg,2)+' kg × ';}
+      label+=String(s.reps==null?'':s.reps);
+      if(s.to_failure){label+=' 🔥';}
+      if(s.assisted){label+=' 🤝';}
+      out.push(label);
+    }
+    return out.join(' · ');
+  }
+
+  function renderSelectedWorkout(){
+    var w=state.work;
+    if(!w){return;}
+    var p=w.plans?w.plans[state.selectedDay]:null;
+    var plan=p&&p.plan?p.plan:[];
+    var lastSets=p&&p.lastSets?p.lastSets:[];
+    var byEx=setsByExercise(lastSets);
+    var target=get('workday');
+    if(!target){return;}
+    var html='<div class="daycard"><div class="row"><div><div class="ey">Día '+String(state.selectedDay)+'</div><div class="stat" style="margin-top:5px">'+String(plan.length)+' ejercicios</div></div><div class="small" style="text-align:right">'+(p&&p.lastDate?'Última<br><b class="soft">'+escapeHtml(p.lastDate)+'</b>':'Sin sesión previa')+'</div></div></div>';
+    html+='<div class="card">';
+    if(!plan.length){html+='<div class="empty">No hay rutina disponible para este día.</div>';}
+    for(var i=0;i<plan.length;i++){
+      var e=plan[i];
+      var sets=byEx[String(e.exercise_code||'')]||[];
+      html+='<div class="exercise"><div><span class="excode">'+escapeHtml(e.exercise_code||'')+'</span><span class="exname">'+escapeHtml(e.exercise_name||'')+'</span></div><div class="expresc">'+escapeHtml(e.prescription||'')+'</div>'+(sets.length?'<div class="exlast">Última: '+escapeHtml(lastSetsText(sets))+'</div>':'<div class="exlast">Sin referencia real anterior.</div>')+'</div>';
+    }
+    html+='</div>';
+    target.innerHTML=html;
+  }
+
+  function bindDayChips(){
+    var chips=document.querySelectorAll('.daychip');
+    for(var i=0;i<chips.length;i++){
+      chips[i].onclick=function(){
+        var d=parseInt(this.getAttribute('data-day'),10);
+        if(isNaN(d)){return;}
+        state.selectedDay=d;
+        var all=document.querySelectorAll('.daychip');
+        for(var j=0;j<all.length;j++){all[j].className='daychip'+(parseInt(all[j].getAttribute('data-day'),10)===d?' on':'');}
+        renderSelectedWorkout();
+      };
+    }
   }
 
   function renderWork(w){
-    var html='<div class="hero"><div class="ey">Entrenamiento</div><div class="big">Días 1–5</div><div class="small">Rutina vigente y última sesión real.</div></div>';
-    if(w&&w.active&&w.active.workout){html+='<div class="card"><div class="ey">Sesión activa</div><div class="stat">Día '+escapeHtml(w.active.workout.workout_day)+'</div></div>';}
-    for(var d=1;d<=5;d++){
-      var p=w&&w.plans?w.plans[d]:null;
-      var plan=p&&p.plan?p.plan:[];
-      var lastSets=p&&p.lastSets?p.lastSets:[];
-      html+='<div class="section">Día '+d+(p&&p.lastDate?' · '+escapeHtml(p.lastDate):'')+'</div><div class="card">'+(plan.length?groupLatest(plan,lastSets):'<div class="small">Sin rutina.</div>')+'</div>';
+    var active=w&&w.active&&w.active.workout?w.active:null;
+    if(active&&active.workout){state.selectedDay=parseInt(active.workout.workout_day,10)||1;}
+    var html='<div class="hero"><div class="ey">Entrenamiento</div><div class="big">Rutina <span class="unit">Días 1–5</span></div><div class="small">Plan vigente y última sesión real de referencia.</div></div>';
+    if(active&&active.workout){
+      var ax=active.exercise?escapeHtml(active.exercise.exercise_code||'')+'. '+escapeHtml(active.exercise.exercise_name||''):'Sesión activa';
+      html+='<div class="activebanner"><div class="row"><div><div class="ey">▶️ Sesión activa</div><div class="quickvalue" style="margin-top:5px">Día '+escapeHtml(active.workout.workout_day)+'</div><div class="small" style="margin-top:4px">'+ax+'</div></div><span class="pill good"><i class="dot"></i>En curso</span></div></div>';
     }
+    html+='<div class="sectionhead"><div class="sectiontitle">Selecciona día</div></div><div class="daychips">';
+    for(var d=1;d<=5;d++){html+='<button class="daychip'+(d===state.selectedDay?' on':'')+'" data-day="'+String(d)+'">Día '+String(d)+'</button>';}
+    html+='</div><div id="workday"></div>';
     get('work').innerHTML=html;
+    bindDayChips();
+    renderSelectedWorkout();
+  }
+
+  function trendLabel(wt){
+    if(!wt||!wt.sufficient){return 'Datos insuficientes';}
+    if(wt.state==='decreasing'){return '↓ '+fmt(Math.abs(num(wt.kg_per_week)),2)+' kg/sem';}
+    if(wt.state==='increasing'){return '↑ '+fmt(Math.abs(num(wt.kg_per_week)),2)+' kg/sem';}
+    if(wt.state==='stable'){return '→ Estable';}
+    return cap(wt.state||'Tendencia disponible');
   }
 
   function renderProgress(p){
     var wt=p&&p.weightTrend?p.weightTrend:{};
     var nu=p&&p.nutrition?p.nutrition:{};
     var cur=nu&&nu.current7?nu.current7:{};
-    var html='<div class="hero"><div class="ey">Progreso</div><div class="big">'+(wt.latest_weight!=null?fmt(wt.latest_weight,2)+' <span style="font-size:14px;color:var(--muted)">kg</span>':'—')+'</div><div class="small">'+(wt.sufficient?escapeHtml(wt.state||'Tendencia disponible'):'Datos de peso insuficientes')+'</div></div>';
-    html+='<div class="grid3"><div class="card"><div class="stat">'+Math.round(num(cur.avg_kcal))+'</div><div class="small">kcal/día · 7d</div></div><div class="card"><div class="stat">'+fmt(cur.avg_protein,1)+'</div><div class="small">g proteína · 7d</div></div><div class="card"><div class="stat">'+Math.round(num(cur.adherence_pct))+'%</div><div class="small">adherencia</div></div></div>';
-    html+='<div class="section">Entrenamiento</div>';
-    for(var d=1;d<=5;d++){var x=p&&p.workoutProgress?p.workoutProgress[d]:null;x=x||{};html+='<div class="card"><div class="row"><b>Día '+d+'</b><div class="small">'+String(x.suggestions||0)+' sugerencias</div></div><div class="small" style="margin-top:7px">Mejorando '+String(x.improving||0)+' · Estables '+String(x.stable||0)+' · Estancados '+String(x.stagnating||0)+'</div></div>';}
+    var html='<div class="hero"><div class="row"><div><div class="ey">Progreso</div><div class="big">'+(wt.latest_weight!=null?fmt(wt.latest_weight,2)+' <span class="unit">kg</span>':'—')+'</div><div class="trend">'+escapeHtml(trendLabel(wt))+'</div></div><span class="pill '+(wt.state==='decreasing'?'good':'')+'">Peso</span></div></div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">Últimos 7 días</div><div class="sectionmeta">Nutrición</div></div>';
+    html+='<div class="grid3">'+
+      '<div class="metric"><div class="ey">Media</div><div class="stat">'+Math.round(num(cur.avg_kcal))+'</div><div class="small">kcal/día</div></div>'+
+      '<div class="metric"><div class="ey">Proteína</div><div class="stat">'+fmt(cur.avg_protein,1)+'</div><div class="small">g/día</div></div>'+
+      '<div class="metric"><div class="ey">Adherencia</div><div class="stat">'+Math.round(num(cur.adherence_pct))+'%</div><div class="small">7 días</div></div>'+
+      '</div>';
+    html+='<div class="sectionhead"><div class="sectiontitle">Entrenamiento</div><div class="sectionmeta">Evolución D1–D5</div></div><div class="card">';
+    for(var d=1;d<=5;d++){
+      var x=p&&p.workoutProgress?p.workoutProgress[d]:null;x=x||{};
+      html+='<div class="progressday"><div class="daynum">'+String(d)+'</div><div><div class="foodname">Día '+String(d)+'</div><div class="pstats">Mejorando '+String(x.improving||0)+' · Estables '+String(x.stable||0)+' · Estancados '+String(x.stagnating||0)+'</div></div><span class="pill">'+String(x.suggestions||0)+' sug.</span></div>';
+    }
+    html+='</div>';
     get('progress').innerHTML=html;
   }
 
@@ -162,8 +393,8 @@ function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/
   }
 
   var navButtons=document.querySelectorAll('.nav button');
-  for(var n=0;n<navButtons.length;n++){
-    navButtons[n].onclick=function(){selectTab(this.getAttribute('data-tab'));};
+  for(var i=0;i<navButtons.length;i++){
+    navButtons[i].onclick=function(){selectTab(this.getAttribute('data-tab'));};
   }
 
   load('home',renderHome);
