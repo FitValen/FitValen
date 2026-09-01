@@ -1,5 +1,5 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "compat-00eef12";
+const BUILD = "ui-917e2b62";
 
 export default {
   async fetch(request, env) {
