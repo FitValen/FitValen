@@ -1,0 +1,20 @@
+/* FitValen Mini App · fullscreen control */
+#fvFullscreenBtn{
+  width:36px;
+  height:36px;
+  border-radius:12px;
+  font-size:17px;
+  line-height:1;
+  flex:0 0 auto;
+}
+#fvFullscreenBtn.on{
+  color:var(--accent2);
+  border-color:rgba(103,228,147,.28);
+  background:rgba(103,228,147,.09);
+}
+#fvFullscreenBtn.unsupported{
+  opacity:.72;
+}
+@media(max-width:390px){
+  #fvFullscreenBtn{width:34px;height:34px;border-radius:11px}
+}
