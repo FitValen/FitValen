@@ -33,9 +33,19 @@
     var results=document.getElementById('fvProductResults');if(!results){return}
     var b=document.createElement('button');b.id='fvManualFoodBtn';b.className='actionbtn wide';b.style.marginTop='10px';b.textContent='✍️ Introducir alimento manualmente';b.onclick=manualSheet;results.parentNode.insertBefore(b,results)
   }
+  function weightDelta(weights,days){
+    if(!weights||weights.length<2){return null}
+    var end=weights[weights.length-1],endT=new Date(end.entry_date+'T12:00:00').getTime(),target=endT-days*86400000,start=null;
+    for(var i=weights.length-2;i>=0;i--){var t=new Date(weights[i].entry_date+'T12:00:00').getTime();if(t<=target){start=weights[i];break}}
+    if(!start){return null}
+    return num(end.weight_kg)-num(start.weight_kg)
+  }
+  function weightDeltaText(v){if(v==null){return '—'}return (v>0?'+':'')+fmt(v,2)+' kg'}
   function patchProgress(){
     if(!progressData){return}
     var root=document.querySelector('#progress .fvAdvancedProgress');if(!root){return}
+    var hero=root.querySelector('.fvTrendHero'),weightGrid=hero?hero.nextElementSibling:null,weights=progressData.weights||[];
+    if(weightGrid&&String(weightGrid.className).indexOf('fvPeriodGrid')>=0&&weightGrid.children&&weightGrid.children.length>=3){var ds=[7,28,90];for(var w=0;w<3;w++){var b=weightGrid.children[w].querySelector('b');if(b){b.textContent=weightDeltaText(weightDelta(weights,ds[w]))}}}
     var heads=root.querySelectorAll('.sectionhead'),head=null;for(var i=0;i<heads.length;i++){var t=heads[i].querySelector('.sectiontitle');if(t&&text(t)==='Nutrición'){head=heads[i];break}}
     if(!head){return}
     var grid=head.nextElementSibling;if(!grid||String(grid.className).indexOf('grid2')<0){return}
