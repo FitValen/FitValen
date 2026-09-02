@@ -1,16 +1,21 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "ux-padding-e7791a8";
+const BUILD = "workout-v1-432f55c";
 
 function enhanceHtml(html) {
-  if (html.includes("enhance-v2.js")) return html;
-  html = html.replace(
-    "</head>",
-    '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"></head>',
-  );
-  html = html.replace(
-    "</body>",
-    '<script src="/enhance-v2.js?v=08a0fde"></script></body>',
-  );
+  if (!html.includes("enhance-v2.css")) {
+    html = html.replace(
+      "</head>",
+      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=432f55c"></head>',
+    );
+  } else if (!html.includes("workout-v1.css")) {
+    html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=432f55c"></head>');
+  }
+  if (!html.includes("enhance-v2.js")) {
+    html = html.replace("</body>", '<script src="/enhance-v2.js?v=08a0fde"></script></body>');
+  }
+  if (!html.includes("workout-v1.js")) {
+    html = html.replace("</body>", '<script src="/workout-v1.js?v=432f55c"></script></body>');
+  }
   return html;
 }
 
