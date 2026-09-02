@@ -11,16 +11,8 @@
     img.src=DATA;
     box.appendChild(img);
   }
-  function loadZepp(){
-    if(document.querySelector('script[src*="zepp-v1.js"]')){return}
-    var s=document.createElement('script');
-    s.src='/zepp-v1.js?v=adc672d';
-    s.defer=true;
-    document.head.appendChild(s);
-  }
   function install(){
     installLogo();
-    loadZepp();
     var top=document.querySelector('.topbar');
     if(top&&window.MutationObserver){new MutationObserver(function(){installLogo()}).observe(top,{childList:true,subtree:true})}
   }
