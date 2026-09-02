@@ -13,7 +13,7 @@
   function initData(){var tg=telegram();try{return tg&&tg.initData?tg.initData:''}catch(e){return ''}}
   function haptic(type){var tg=telegram();try{if(tg&&tg.HapticFeedback){tg.HapticFeedback.impactOccurred(type||'light')}}catch(e){}}
   function alertMessage(text){var tg=telegram();try{if(tg&&tg.showAlert){tg.showAlert(text);return}}catch(e){}window.alert(text)}
-  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]})}
   function num(v){var n=Number(v||0);return isFinite(n)?n:0}
   function fmt(v,d){return num(v).toLocaleString('es-ES',{maximumFractionDigits:d==null?1:d})}
   function request(action,payload){return fetch(window.location.href,{method:'POST',headers:{'content-type':'application/json','x-telegram-init-data':initData()},body:JSON.stringify({action:action,payload:payload||{}})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok){throw new Error(j.reason||j.error||('HTTP '+r.status))}return j.data})})}
@@ -31,13 +31,13 @@
 
 (function(){
   function loadWorkout(){
-    if(!document.querySelector('link[data-fv-workout]')){var l=document.createElement('link');l.rel='stylesheet';l.href='/workout-v1.css?v=2993e67';l.setAttribute('data-fv-workout','1');document.head.appendChild(l)}
-    if(!document.querySelector('script[data-fv-workout]')){var s=document.createElement('script');s.src='/workout-v2.js?v=cfe81f1';s.setAttribute('data-fv-workout','1');document.body.appendChild(s)}
+    if(!document.querySelector('link[href*="workout-v1.css"]')){var l=document.createElement('link');l.rel='stylesheet';l.href='/workout-v1.css?v=2993e67';l.setAttribute('data-fv-workout','1');document.head.appendChild(l)}
+    if(!document.querySelector('script[src*="workout-v2.js"]')){var s=document.createElement('script');s.src='/workout-v2.js?v=cfe81f1';s.setAttribute('data-fv-workout','1');document.body.appendChild(s)}
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadWorkout)}else{loadWorkout()}
 })();
 
 (function(){
-  function loadSafeArea(){if(document.querySelector('script[data-fv-safearea]')){return}var s=document.createElement('script');s.src='/fullscreen-safe-v2.js?v=1a5a7a0';s.setAttribute('data-fv-safearea','1');document.body.appendChild(s)}
+  function loadSafeArea(){if(document.querySelector('script[src*="fullscreen-safe-v2.js"]')){return}var s=document.createElement('script');s.src='/fullscreen-safe-v2.js?v=e46ff7a';s.setAttribute('data-fv-safearea','1');document.body.appendChild(s)}
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadSafeArea)}else{loadSafeArea()}
 })();
