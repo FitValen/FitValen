@@ -86,9 +86,10 @@
 
 (function(){
   var busy=false;
+  var rowObserver=null;
   function tg(){try{return window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null}catch(e){return null}}
   function initData(){var x=tg();try{return x&&x.initData?x.initData:''}catch(e){return ''}}
-  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]})}
   function alertMsg(text){var x=tg();try{if(x&&x.showAlert){x.showAlert(text);return}}catch(e){}window.alert(text)}
   function notify(text){var e=document.getElementById('toast');if(!e){return}e.textContent=text;e.className='toast on';setTimeout(function(){e.className='toast'},1800)}
   function request(action,payload){return fetch(window.location.href,{method:'POST',headers:{'content-type':'application/json','x-telegram-init-data':initData()},body:JSON.stringify({action:action,payload:payload||{}})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok){throw new Error(j.reason||j.error||('HTTP '+r.status))}return j.data})})}
@@ -96,7 +97,6 @@
   function openSheet(html){var o=document.getElementById('overlay'),s=document.getElementById('sheet');if(!o||!s){return}s.innerHTML=html;o.className='overlay on';var c=document.getElementById('fvConsumedClose');if(c){c.onclick=closeSheet}}
   function refreshDiet(){var tab=document.querySelector('.nav button[data-tab="diet"]');if(tab){tab.click();return}var r=document.getElementById('refresh');if(r){r.click()}}
   function dietOpen(){var root=document.getElementById('diet'),pill=root?root.querySelector('.hero .pill'):null,text=String(pill&&pill.textContent?pill.textContent:'').toLowerCase();return text.indexOf('abierta')>=0}
-  function rowFromTarget(t){while(t&&t!==document){if(String(t.className||'').indexOf('foodrow')>=0){return t}t=t.parentNode}return null}
   function rowIndex(row){var root=document.getElementById('diet'),rows=root?root.querySelectorAll('.foodrow'):[];for(var i=0;i<rows.length;i++){if(rows[i]===row){return i}}return -1}
   function editSheet(food){
     var html='<div class="row"><div><div class="ey">✏️ EDITAR ALIMENTO</div><div class="stat" style="margin-top:5px">'+esc(food.product_name||'Alimento')+'</div></div><button class="iconbtn" id="fvConsumedClose">×</button></div>'+
@@ -113,11 +113,26 @@
     var idx=rowIndex(row);if(idx<0){return}
     request('diet',{}).then(function(d){var foods=d&&d.foods?d.foods:[];if(!foods[idx]){alertMsg('No se pudo localizar el alimento. Actualiza la pantalla.');return}editSheet(foods[idx])}).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})
   }
+  function hasActionTarget(t,row){while(t&&t!==row){if(String(t.tagName||'').toLowerCase()==='button'){return true}t=t.parentNode}return false}
+  function bindRows(){
+    var root=document.getElementById('diet');if(!root){return}
+    var rows=root.querySelectorAll('.foodrow');
+    for(var i=0;i<rows.length;i++){
+      if(rows[i].getAttribute('data-fv-consumed-edit')==='1'){continue}
+      rows[i].setAttribute('data-fv-consumed-edit','1');
+      rows[i].style.cursor='pointer';
+      rows[i].onclick=function(e){if(hasActionTarget(e.target,this)){return}e.preventDefault();e.stopPropagation();openRow(this)}
+    }
+  }
+  function installRows(){
+    var root=document.getElementById('diet');
+    if(root&&window.MutationObserver){rowObserver=new MutationObserver(function(){setTimeout(bindRows,0)});rowObserver.observe(root,{childList:true,subtree:true})}
+    bindRows();setTimeout(bindRows,120);setTimeout(bindRows,500)
+  }
   document.addEventListener('click',function(e){
     var t=e.target;if(!t){return}
     var action=t;while(action&&action!==document&&String(action.tagName||'').toLowerCase()!=='button'){action=action.parentNode}
     if(action&&(action.getAttribute('data-edit')!==null||action.getAttribute('data-delete')!==null)){return}
-    var row=rowFromTarget(t);if(!row){return}
-    e.preventDefault();openRow(row)
-  },false)
+  },false);
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',installRows)}else{installRows()}
 })();
