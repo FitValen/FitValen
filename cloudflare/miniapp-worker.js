@@ -1,20 +1,20 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "workout-v1-432f55c";
+const BUILD = "workout-focus-v2-2993e67";
 
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
     html = html.replace(
       "</head>",
-      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=432f55c"></head>',
+      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>',
     );
   } else if (!html.includes("workout-v1.css")) {
-    html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=432f55c"></head>');
+    html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>');
   }
   if (!html.includes("enhance-v2.js")) {
-    html = html.replace("</body>", '<script src="/enhance-v2.js?v=08a0fde"></script></body>');
+    html = html.replace("</body>", '<script src="/enhance-v2.js?v=cc258c2"></script></body>');
   }
   if (!html.includes("workout-v1.js")) {
-    html = html.replace("</body>", '<script src="/workout-v1.js?v=432f55c"></script></body>');
+    html = html.replace("</body>", '<script src="/workout-v1.js?v=2993e67"></script></body>');
   }
   return html;
 }
@@ -40,33 +40,18 @@ export default {
         );
       }
     }
-
     if (request.method === "GET" || request.method === "HEAD") {
       const response = await env.ASSETS.fetch(request);
       const headers = new Headers(response.headers);
       headers.set("x-fitvalen-build", BUILD);
       headers.set("cache-control", "no-store, no-cache, must-revalidate");
       headers.delete("content-length");
-
-      if (request.method === "HEAD") {
-        return new Response(null, { status: response.status, headers });
-      }
-
+      if (request.method === "HEAD") return new Response(null, { status: response.status, headers });
       const contentType = response.headers.get("content-type") || "";
-      if (!contentType.includes("text/html")) {
-        return new Response(response.body, { status: response.status, headers });
-      }
-
+      if (!contentType.includes("text/html")) return new Response(response.body, { status: response.status, headers });
       headers.set("content-type", "text/html; charset=utf-8");
-      return new Response(enhanceHtml(await response.text()), {
-        status: response.status,
-        headers,
-      });
+      return new Response(enhanceHtml(await response.text()), { status: response.status, headers });
     }
-
-    return new Response("Method Not Allowed", {
-      status: 405,
-      headers: { allow: "GET, HEAD, POST", "x-fitvalen-build": BUILD },
-    });
+    return new Response("Method Not Allowed", { status: 405, headers: { allow: "GET, HEAD, POST", "x-fitvalen-build": BUILD } });
   },
 };
