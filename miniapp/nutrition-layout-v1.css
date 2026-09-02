@@ -1,0 +1,5 @@
+/* FitValen · Progress nutrition layout fix */
+#fvNutritionPeriods{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;margin:0 0 14px!important;position:relative!important;z-index:1!important}
+#fvNutritionPeriods + .grid2,#fvNutritionPeriods ~ .grid2{padding-top:14px!important;margin-top:0!important;gap:10px!important;position:relative!important;z-index:0!important}
+#fvNutritionPeriods + .grid2 .metric,#fvNutritionPeriods ~ .grid2 .metric{margin-top:0!important;transform:none!important;position:relative!important}
+@media(max-width:390px){#fvNutritionPeriods{gap:7px!important;margin-bottom:13px!important}#fvNutritionPeriods + .grid2,#fvNutritionPeriods ~ .grid2{padding-top:13px!important;gap:9px!important}}
