@@ -1,5 +1,18 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "beta-7642fab3";
+const BUILD = "ux-quick-08a0fde";
+
+function enhanceHtml(html) {
+  if (html.includes("enhance-v2.js")) return html;
+  html = html.replace(
+    "</head>",
+    '<link rel="stylesheet" href="/enhance-v2.css?v=08a0fde"></head>',
+  );
+  html = html.replace(
+    "</body>",
+    '<script src="/enhance-v2.js?v=08a0fde"></script></body>',
+  );
+  return html;
+}
 
 export default {
   async fetch(request, env) {
@@ -16,17 +29,39 @@ export default {
         responseHeaders.delete("content-length");
         return new Response(response.body, { status: response.status, headers: responseHeaders });
       } catch (error) {
-        return Response.json({ ok: false, error: "proxy_error", reason: String(error) }, { status: 502, headers: { "cache-control": "no-store", "x-fitvalen-build": BUILD } });
+        return Response.json(
+          { ok: false, error: "proxy_error", reason: String(error) },
+          { status: 502, headers: { "cache-control": "no-store", "x-fitvalen-build": BUILD } },
+        );
       }
     }
+
     if (request.method === "GET" || request.method === "HEAD") {
       const response = await env.ASSETS.fetch(request);
       const headers = new Headers(response.headers);
       headers.set("x-fitvalen-build", BUILD);
       headers.set("cache-control", "no-store, no-cache, must-revalidate");
       headers.delete("content-length");
-      return new Response(request.method === "HEAD" ? null : response.body, { status: response.status, headers });
+
+      if (request.method === "HEAD") {
+        return new Response(null, { status: response.status, headers });
+      }
+
+      const contentType = response.headers.get("content-type") || "";
+      if (!contentType.includes("text/html")) {
+        return new Response(response.body, { status: response.status, headers });
+      }
+
+      headers.set("content-type", "text/html; charset=utf-8");
+      return new Response(enhanceHtml(await response.text()), {
+        status: response.status,
+        headers,
+      });
     }
-    return new Response("Method Not Allowed", { status: 405, headers: { allow: "GET, HEAD, POST", "x-fitvalen-build": BUILD } });
+
+    return new Response("Method Not Allowed", {
+      status: 405,
+      headers: { allow: "GET, HEAD, POST", "x-fitvalen-build": BUILD },
+    });
   },
 };
