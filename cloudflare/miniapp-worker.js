@@ -1,20 +1,24 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "live-ui-v3-90847fc";
+const BUILD = "fullscreen-v1-f36fea0";
 
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
     html = html.replace(
       "</head>",
-      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>',
+      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"><link rel="stylesheet" href="/fullscreen-v1.css?v=aa26928"></head>',
     );
-  } else if (!html.includes("workout-v1.css")) {
-    html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>');
+  } else {
+    if (!html.includes("workout-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>');
+    if (!html.includes("fullscreen-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/fullscreen-v1.css?v=aa26928"></head>');
   }
   if (!html.includes("enhance-v2.js")) {
     html = html.replace("</body>", '<script src="/enhance-v2.js?v=90847fc"></script></body>');
   }
   if (!html.includes("workout-v2.js")) {
     html = html.replace("</body>", '<script src="/workout-v2.js?v=cfe81f1"></script></body>');
+  }
+  if (!html.includes("fullscreen-v1.js")) {
+    html = html.replace("</body>", '<script src="/fullscreen-v1.js?v=f36fea0"></script></body>');
   }
   return html;
 }
