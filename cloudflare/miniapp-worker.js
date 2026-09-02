@@ -1,5 +1,5 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "fullscreen-safearea-v2-3bd38c8";
+const BUILD = "fullscreen-locked-v3-bc76aa2";
 
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
@@ -18,7 +18,7 @@ function enhanceHtml(html) {
     html = html.replace("</body>", '<script src="/workout-v2.js?v=cfe81f1"></script></body>');
   }
   if (!html.includes("fullscreen-v1.js")) {
-    html = html.replace("</body>", '<script src="/fullscreen-v1.js?v=21aac4d"></script></body>');
+    html = html.replace("</body>", '<script src="/fullscreen-v1.js?v=bc76aa2"></script></body>');
   }
   return html;
 }
