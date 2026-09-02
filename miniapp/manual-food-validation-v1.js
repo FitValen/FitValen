@@ -8,5 +8,10 @@
       stop(e);notify('Completa cantidad, kcal y todos los macros');
     }
   }
+  function loadZepp(){
+    if(!document.querySelector('link[href*="zepp-v1.css"]')){var l=document.createElement('link');l.rel='stylesheet';l.href='/zepp-v1.css?v=1498cd6';document.head.appendChild(l)}
+    if(!document.querySelector('script[src*="zepp-v1.js"]')){var s=document.createElement('script');s.src='/zepp-v1.js?v=013856e';s.defer=true;document.body.appendChild(s)}
+  }
   document.addEventListener('click',validate,true);
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadZepp)}else{loadZepp()}
 })();
