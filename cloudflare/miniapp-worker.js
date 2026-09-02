@@ -2,12 +2,42 @@ const CORE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen
 const ADVANCED_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-v7";
 const MANUAL_FOOD_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-manual-food";
 const EXERCISE_NOTE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-exercise-note";
-const BUILD = "advanced-v1-set-edit-31b7f3b";
+const BUILD = "advanced-v1-inline-edit-20260902";
 const ADVANCED_ACTIONS = new Set([
   "workout_extras","edit_set","set_exercise_note","set_workout_note","add_cardio","delete_cardio",
   "products","add_food","edit_food","delete_food","diet_free_day","full_free_day","reopen_diet",
   "day_summary","finish_day","progress_v2"
 ]);
+
+const INLINE_SET_EDIT = `<script data-fv-inline-set-edit="1">(function(){
+  var lastTouch=0,busy=false;
+  function tg(){try{return window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null}catch(e){return null}}
+  function initData(){var x=tg();try{return x&&x.initData?x.initData:''}catch(e){return ''}}
+  function esc(v){return String(v==null?'':v).replace(/[&<>\"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]})}
+  function request(action,payload){return fetch(window.location.href,{method:'POST',headers:{'content-type':'application/json','x-telegram-init-data':initData()},body:JSON.stringify({action:action,payload:payload||{}})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok){throw new Error(j.reason||j.error||('HTTP '+r.status))}return j.data})})}
+  function closeSheet(){var o=document.getElementById('overlay');if(o){o.className='overlay'}}
+  function openSheet(html){var o=document.getElementById('overlay'),s=document.getElementById('sheet');if(!o||!s){return}s.innerHTML=html;o.className='overlay on';var c=document.getElementById('fvInlineSetClose');if(c){c.onclick=closeSheet}}
+  function alertMsg(text){var x=tg();try{if(x&&x.showAlert){x.showAlert(text);return}}catch(e){}window.alert(text)}
+  function notify(text){var e=document.getElementById('toast');if(!e){return}e.textContent=text;e.className='toast on';setTimeout(function(){e.className='toast'},1800)}
+  function hasBallast(notes){return String(notes||'').indexOf('[LASTRE]')>=0}
+  function cleanNote(notes){return String(notes||'').replace('[LASTRE]','').replace(/^\\s+|\\s+$/g,'')}
+  function findChip(t){while(t&&t!==document){if(String(t.className||'').indexOf('fvSetChip')>=0){return t}t=t.parentNode}return null}
+  function chipIndex(chip){var chips=document.querySelectorAll('#fvWorkoutControls .fvSetChip');for(var i=0;i<chips.length;i++){if(chips[i]===chip){return i}}return -1}
+  function editSheet(s){var html='<div class="row"><div><div class="ey">✏️ EDITAR SERIE</div><div class="stat" style="margin-top:5px">Serie '+esc(s.set_order)+'</div></div><button class="iconbtn" id="fvInlineSetClose">×</button></div>'+
+    '<div class="fvChoiceRow"><div class="fvField"><label>Peso kg</label><input class="fvText" id="fvInlineSetWeight" type="text" inputmode="decimal" value="'+esc(s.weight_kg==null?'':s.weight_kg)+'"></div><div class="fvField"><label>Reps</label><input class="fvText" id="fvInlineSetReps" type="text" inputmode="numeric" value="'+esc(s.reps==null?'':s.reps)+'"></div></div>'+
+    '<div class="fvChoiceRow"><label class="fvCheck"><input type="checkbox" id="fvInlineSetFailure" '+(s.to_failure?'checked':'')+'>🔥 Fallo</label><label class="fvCheck"><input type="checkbox" id="fvInlineSetAssist" '+(s.assisted?'checked':'')+'>🤝 Asistida</label></div>'+
+    '<label class="fvCheck" style="margin-top:8px"><input type="checkbox" id="fvInlineSetBallast" '+(hasBallast(s.notes)?'checked':'')+'>🎒 Lastre</label>'+
+    '<div class="fvField"><label>Observación de serie</label><textarea class="fvArea" id="fvInlineSetNote" placeholder="Opcional">'+esc(cleanNote(s.notes))+'</textarea></div>'+
+    '<button class="actionbtn primary wide" style="margin-top:12px" id="fvInlineSetSave">Guardar serie</button>';
+    openSheet(html);
+    var save=document.getElementById('fvInlineSetSave');
+    if(save){save.onclick=function(){if(busy){return}busy=true;save.disabled=true;request('edit_set',{set_id:s.id,weight:document.getElementById('fvInlineSetWeight').value,reps:document.getElementById('fvInlineSetReps').value,to_failure:document.getElementById('fvInlineSetFailure').checked,assisted:document.getElementById('fvInlineSetAssist').checked,ballast:document.getElementById('fvInlineSetBallast').checked,note:document.getElementById('fvInlineSetNote').value}).then(function(){busy=false;save.disabled=false;closeSheet();notify('Serie actualizada');var r=document.getElementById('refresh');if(r){setTimeout(function(){r.click()},50)}}).catch(function(e){busy=false;save.disabled=false;alertMsg(e&&e.message?e.message:String(e))})}}
+  }
+  function openFor(chip){var idx=chipIndex(chip);request('workout_extras',{}).then(function(d){var sets=d&&d.currentSets?d.currentSets:[];if(idx<0||!sets[idx]){alertMsg('No se pudo localizar esa serie.');return}editSheet(sets[idx])}).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})}
+  function handle(e,isTouch){var chip=findChip(e.target);if(!chip){return}if(!isTouch&&Date.now()-lastTouch<700){return}if(isTouch){lastTouch=Date.now()}e.preventDefault();e.stopPropagation();if(e.stopImmediatePropagation){e.stopImmediatePropagation()}openFor(chip)}
+  document.addEventListener('touchend',function(e){handle(e,true)},true);
+  document.addEventListener('click',function(e){handle(e,false)},true);
+})();</script>`;
 
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
@@ -26,7 +56,7 @@ function enhanceHtml(html) {
   if (!html.includes("workout-v2.js")) html = html.replace("</body>", '<script src="/workout-v2.js?v=cfe81f1"></script></body>');
   if (!html.includes("workout-input-context-v1.js")) html = html.replace("</body>", '<script src="/workout-input-context-v1.js?v=10964f1"></script></body>');
   if (!html.includes("advanced-v1.js")) html = html.replace("</body>", '<script src="/advanced-v1.js?v=b2fc32e"></script></body>');
-  if (!html.includes("set-edit-fix-v1.js")) html = html.replace("</body>", '<script src="/set-edit-fix-v1.js?v=31b7f3b"></script></body>');
+  if (!html.includes('data-fv-inline-set-edit="1"')) html = html.replace("</body>", INLINE_SET_EDIT+"</body>");
   if (!html.includes("exercise-note-v2.js")) html = html.replace("</body>", '<script src="/exercise-note-v2.js?v=2eafa8d"></script></body>');
   if (!html.includes("advanced-guards-v1.js")) html = html.replace("</body>", '<script src="/advanced-guards-v1.js?v=3bff704"></script></body>');
   if (!html.includes("manual-food-validation-v1.js")) html = html.replace("</body>", '<script src="/manual-food-validation-v1.js?v=8fd68c6"></script></body>');
