@@ -30,6 +30,14 @@
       if(save){save.onclick=function(){var note=document.getElementById('fvExerciseNoteInput').value;save.disabled=true;request('save_exercise_note',{note:note}).then(function(x){save.disabled=false;closeSheet();paint(x);notify('Nota de ejercicio guardada')}).catch(function(e){save.disabled=false;alertMsg(e&&e.message?e.message:String(e))})}}
     }).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})
   }
+  function patchCardioCount(){
+    var grid=document.querySelector('#sheet .fvMenuGrid');
+    if(!grid){return}
+    var buttons=grid.querySelectorAll('button'),cardio=null;
+    for(var i=0;i<buttons.length;i++){if(String(buttons[i].textContent||'').toLowerCase().indexOf('cardio')>=0){cardio=buttons[i];break}}
+    if(!cardio){return}
+    request('workout_extras',{}).then(function(d){var n=d&&d.cardio?d.cardio.length:0;cardio.textContent='🏃 Cardio'+(n?' · '+n:'')}).catch(function(){})
+  }
   function patchMenu(){
     var grid=document.querySelector('#sheet .fvMenuGrid');
     if(!grid){return}
@@ -42,9 +50,11 @@
       found.textContent='📝 Nota ejercicio';
       grid.appendChild(found);
     }
-    if(found.getAttribute('data-fv-note-v2')==='1'){return}
-    found.setAttribute('data-fv-note-v2','1');
-    found.onclick=noteSheet;
+    if(found.getAttribute('data-fv-note-v2')!=='1'){
+      found.setAttribute('data-fv-note-v2','1');
+      found.onclick=noteSheet;
+    }
+    setTimeout(patchCardioCount,40);
   }
   document.addEventListener('click',function(e){
     var t=e.target;
