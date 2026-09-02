@@ -1,6 +1,6 @@
 const CORE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
 const ADVANCED_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-v7";
-const BUILD = "advanced-v1-b2fc32e";
+const BUILD = "advanced-v1-396d91c";
 const ADVANCED_ACTIONS = new Set([
   "workout_extras","edit_set","set_exercise_note","set_workout_note","add_cardio","delete_cardio",
   "products","add_food","edit_food","delete_food","diet_free_day","full_free_day","reopen_diet",
@@ -18,7 +18,7 @@ function enhanceHtml(html) {
     if (!html.includes("fullscreen-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/fullscreen-v1.css?v=3bd38c8"></head>');
     if (!html.includes("advanced-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/advanced-v1.css?v=3dbff39"></head>');
   }
-  if (!html.includes("enhance-v2.js")) html = html.replace("</body>", '<script src="/enhance-v2.js?v=90847fc"></script></body>');
+  if (!html.includes("enhance-v2.js")) html = html.replace("</body>", '<script src="/enhance-v2.js?v=396d91c"></script></body>');
   if (!html.includes("workout-v2.js")) html = html.replace("</body>", '<script src="/workout-v2.js?v=cfe81f1"></script></body>');
   if (!html.includes("advanced-v1.js")) html = html.replace("</body>", '<script src="/advanced-v1.js?v=b2fc32e"></script></body>');
   if (!html.includes("fullscreen-v1.js")) html = html.replace("</body>", '<script src="/fullscreen-v1.js?v=452c0f7"></script></body>');
