@@ -1,4 +1,7 @@
 /* FitValen Mini App · UI enhancements v2 */
+#home .timeline{
+  padding:4px 16px;
+}
 #home .timelineRow{
   grid-template-columns:38px minmax(0,1fr) auto;
   gap:11px;
@@ -80,6 +83,7 @@
 .quickMealBtn.done{border-color:rgba(103,228,147,.42);background:rgba(103,228,147,.13)}
 
 @media(max-width:390px){
+  #home .timeline{padding-left:14px;padding-right:14px}
   #home .timelineRow{grid-template-columns:35px minmax(0,1fr) auto;gap:9px}
   #home .timelineRow>.pill{font-size:9px;padding:4px 7px}
   .quickMealsGrid{gap:7px}
@@ -87,6 +91,7 @@
 }
 
 @media(max-width:340px){
+  #home .timeline{padding-left:12px;padding-right:12px}
   #home .timelineRow{grid-template-columns:35px minmax(0,1fr)}
   #home .timelineRow>.pill{grid-column:2;justify-self:start;margin-top:1px}
   .quickMealsGrid{grid-template-columns:1fr}
