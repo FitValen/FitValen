@@ -13,7 +13,7 @@
   function initData(){var tg=telegram();try{return tg&&tg.initData?tg.initData:''}catch(e){return ''}}
   function haptic(type){var tg=telegram();try{if(tg&&tg.HapticFeedback){tg.HapticFeedback.impactOccurred(type||'light')}}catch(e){}}
   function alertMessage(text){var tg=telegram();try{if(tg&&tg.showAlert){tg.showAlert(text);return}}catch(e){}window.alert(text)}
-  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]})}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
   function num(v){var n=Number(v||0);return isFinite(n)?n:0}
   function fmt(v,d){return num(v).toLocaleString('es-ES',{maximumFractionDigits:d==null?1:d})}
   function request(action,payload){return fetch(window.location.href,{method:'POST',headers:{'content-type':'application/json','x-telegram-init-data':initData()},body:JSON.stringify({action:action,payload:payload||{}})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok){throw new Error(j.reason||j.error||('HTTP '+r.status))}return j.data})})}
