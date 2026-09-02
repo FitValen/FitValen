@@ -1,5 +1,5 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "workout-focus-v2-2993e67";
+const BUILD = "live-ui-v3-90847fc";
 
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
@@ -11,10 +11,10 @@ function enhanceHtml(html) {
     html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>');
   }
   if (!html.includes("enhance-v2.js")) {
-    html = html.replace("</body>", '<script src="/enhance-v2.js?v=cc258c2"></script></body>');
+    html = html.replace("</body>", '<script src="/enhance-v2.js?v=90847fc"></script></body>');
   }
-  if (!html.includes("workout-v1.js")) {
-    html = html.replace("</body>", '<script src="/workout-v1.js?v=2993e67"></script></body>');
+  if (!html.includes("workout-v2.js")) {
+    html = html.replace("</body>", '<script src="/workout-v2.js?v=cfe81f1"></script></body>');
   }
   return html;
 }
