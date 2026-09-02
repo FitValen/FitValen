@@ -36,3 +36,8 @@
   }
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadWorkout)}else{loadWorkout()}
 })();
+
+(function(){
+  function loadSafeArea(){if(document.querySelector('script[data-fv-safearea]')){return}var s=document.createElement('script');s.src='/fullscreen-safe-v2.js?v=1a5a7a0';s.setAttribute('data-fv-safearea','1');document.body.appendChild(s)}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadSafeArea)}else{loadSafeArea()}
+})();
