@@ -1,6 +1,7 @@
 /* FitValen Mini App · advanced UX */
 .topbar{border:1px solid var(--line);border-radius:20px;padding:9px 10px 11px!important;margin-bottom:10px;overflow:hidden;background:linear-gradient(145deg,rgba(20,25,34,.97),rgba(13,16,22,.95))!important;box-shadow:0 10px 30px rgba(0,0,0,.16)}
 #home .progressbar{display:none!important}
+#work .sectionhead .sectionmeta{display:none!important}
 .fvInlineTools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 14px}
 .fvInlineTools.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .fvToolBtn{min-height:45px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);color:var(--soft);font-size:11px;font-weight:900;padding:9px}
