@@ -1,0 +1,12 @@
+/* FitValen V1 · production polish */
+html,body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.topbar{position:relative!important;top:auto!important}
+#work .daychips{position:relative!important;top:auto!important;z-index:1!important;background:transparent!important;padding:1px 1px 11px!important;overflow:visible!important;touch-action:pan-y!important;overscroll-behavior:auto!important}
+#work .daychip{flex:1 1 0!important;min-width:0!important;min-height:46px!important;box-shadow:none!important}
+#work .exerciseCard,#work .hero,#work .card{transform:none!important;will-change:auto!important;backface-visibility:visible!important}
+.screen.on{animation:none!important}
+.nav{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:#090b0f!important}
+.hero,.card,.mealcard,.exerciseCard,.chartcard{box-shadow:0 10px 28px rgba(0,0,0,.16)!important}
+.exerciseCard{border-color:rgba(255,255,255,.085)!important}
+.exname,.foodname,.mealname,.timelineTitle{letter-spacing:-.005em}
+@media(max-width:390px){#work .daychips{gap:6px!important}#work .daychip{min-height:44px!important;font-size:13px!important}}
