@@ -2,7 +2,7 @@ const CORE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen
 const ADVANCED_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-v7";
 const MANUAL_FOOD_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-manual-food";
 const EXERCISE_NOTE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-exercise-note";
-const BUILD = "advanced-v1-workout-closed-e2a248e";
+const BUILD = "advanced-v1-zepp-906d688";
 const ADVANCED_ACTIONS = new Set([
   "workout_extras","edit_set","set_exercise_note","set_workout_note","add_cardio","delete_cardio",
   "products","add_food","edit_food","delete_food","diet_free_day","full_free_day","reopen_diet",
@@ -59,14 +59,15 @@ function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
     html = html.replace(
       "</head>",
-      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"><link rel="stylesheet" href="/fullscreen-v1.css?v=3bd38c8"><link rel="stylesheet" href="/advanced-v1.css?v=364a392"><link rel="stylesheet" href="/logo-fix-v1.css?v=88c6692"><link rel="stylesheet" href="/exercise-note-v1.css?v=2c5a0fe"></head>',
+      '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"><link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"><link rel="stylesheet" href="/fullscreen-v1.css?v=3bd38c8"><link rel="stylesheet" href="/advanced-v1.css?v=364a392"><link rel="stylesheet" href="/logo-fix-v1.css?v=12daacd"><link rel="stylesheet" href="/exercise-note-v1.css?v=2c5a0fe"><link rel="stylesheet" href="/zepp-v1.css?v=537574c"></head>',
     );
   } else {
     if (!html.includes("workout-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/workout-v1.css?v=fb0cc79"></head>');
     if (!html.includes("fullscreen-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/fullscreen-v1.css?v=3bd38c8"></head>');
     if (!html.includes("advanced-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/advanced-v1.css?v=364a392"></head>');
-    if (!html.includes("logo-fix-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/logo-fix-v1.css?v=88c6692"></head>');
+    if (!html.includes("logo-fix-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/logo-fix-v1.css?v=12daacd"></head>');
     if (!html.includes("exercise-note-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/exercise-note-v1.css?v=2c5a0fe"></head>');
+    if (!html.includes("zepp-v1.css")) html = html.replace("</head>", '<link rel="stylesheet" href="/zepp-v1.css?v=537574c"></head>');
   }
   if (!html.includes("enhance-v2.js")) html = html.replace("</body>", '<script src="/enhance-v2.js?v=396d91c"></script></body>');
   if (!html.includes("workout-v2.js")) html = html.replace("</body>", '<script src="/workout-v2.js?v=e2a248e"></script></body>');
@@ -79,7 +80,8 @@ function enhanceHtml(html) {
   if (!html.includes("manual-food-validation-v1.js")) html = html.replace("</body>", '<script src="/manual-food-validation-v1.js?v=8fd68c6"></script></body>');
   if (!html.includes("diet-reopen-refresh-v1.js")) html = html.replace("</body>", '<script src="/diet-reopen-refresh-v1.js?v=ac17789"></script></body>');
   if (!html.includes("auto-day-v1.js")) html = html.replace("</body>", '<script src="/auto-day-v1.js?v=df4eb38"></script></body>');
-  if (!html.includes("header-logo-v1.js")) html = html.replace("</body>", '<script src="/header-logo-v1.js?v=438fbc8"></script></body>');
+  if (!html.includes("zepp-v1.js")) html = html.replace("</body>", '<script src="/zepp-v1.js?v=adc672d"></script></body>');
+  if (!html.includes("header-logo-v1.js")) html = html.replace("</body>", '<script src="/header-logo-v1.js?v=906d688"></script></body>');
   if (!html.includes("fullscreen-v1.js")) html = html.replace("</body>", '<script src="/fullscreen-v1.js?v=908b76d"></script></body>');
   return html;
 }
