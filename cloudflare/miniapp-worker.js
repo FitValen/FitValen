@@ -1,11 +1,11 @@
 const FITVALEN_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp";
-const BUILD = "ux-quick-08a0fde";
+const BUILD = "ux-padding-e7791a8";
 
 function enhanceHtml(html) {
   if (html.includes("enhance-v2.js")) return html;
   html = html.replace(
     "</head>",
-    '<link rel="stylesheet" href="/enhance-v2.css?v=08a0fde"></head>',
+    '<link rel="stylesheet" href="/enhance-v2.css?v=e7791a8"></head>',
   );
   html = html.replace(
     "</body>",
