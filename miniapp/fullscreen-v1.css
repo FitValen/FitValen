@@ -1,4 +1,5 @@
-/* FitValen Mini App · fullscreen control */
+/* FitValen Mini App · fullscreen control + safe area */
+:root{--fv-tg-safe-top:0px}
 #fvFullscreenBtn{
   width:36px;
   height:36px;
@@ -12,9 +13,16 @@
   border-color:rgba(103,228,147,.28);
   background:rgba(103,228,147,.09);
 }
-#fvFullscreenBtn.unsupported{
-  opacity:.72;
+#fvFullscreenBtn.unsupported{opacity:.72}
+html.fvFullscreenOn .app{
+  padding-top:calc(var(--fv-tg-safe-top) + env(safe-area-inset-top,0px) + 10px);
+}
+html.fvFullscreenOn .topbar{
+  top:calc(var(--fv-tg-safe-top) + env(safe-area-inset-top,0px));
 }
 @media(max-width:390px){
   #fvFullscreenBtn{width:34px;height:34px;border-radius:11px}
+  html.fvFullscreenOn .app{
+    padding-top:calc(var(--fv-tg-safe-top) + env(safe-area-inset-top,0px) + 8px);
+  }
 }
