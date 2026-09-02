@@ -2,7 +2,7 @@ const CORE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen
 const ADVANCED_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-v7";
 const MANUAL_FOOD_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-manual-food";
 const EXERCISE_NOTE_API = "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-miniapp-exercise-note";
-const BUILD = "advanced-v1-inline-edit-20260902";
+const BUILD = "advanced-v1-menu-inline-20260902";
 const ADVANCED_ACTIONS = new Set([
   "workout_extras","edit_set","set_exercise_note","set_workout_note","add_cardio","delete_cardio",
   "products","add_food","edit_food","delete_food","diet_free_day","full_free_day","reopen_diet",
@@ -39,6 +39,22 @@ const INLINE_SET_EDIT = `<script data-fv-inline-set-edit="1">(function(){
   document.addEventListener('click',function(e){handle(e,false)},true);
 })();</script>`;
 
+const INLINE_MENU_EXTRAS = `<script data-fv-inline-menu-extras="1">(function(){
+  function tg(){try{return window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null}catch(e){return null}}
+  function initData(){var x=tg();try{return x&&x.initData?x.initData:''}catch(e){return ''}}
+  function esc(v){return String(v==null?'':v).replace(/[&<>\"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]})}
+  function request(action,payload){return fetch(window.location.href,{method:'POST',headers:{'content-type':'application/json','x-telegram-init-data':initData()},body:JSON.stringify({action:action,payload:payload||{}})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok){throw new Error(j.reason||j.error||('HTTP '+r.status))}return j.data})})}
+  function alertMsg(text){var x=tg();try{if(x&&x.showAlert){x.showAlert(text);return}}catch(e){}window.alert(text)}
+  function notify(text){var e=document.getElementById('toast');if(!e){return}e.textContent=text;e.className='toast on';setTimeout(function(){e.className='toast'},1800)}
+  function closeSheet(){var o=document.getElementById('overlay');if(o){o.className='overlay'}}
+  function openSheet(html){var o=document.getElementById('overlay'),s=document.getElementById('sheet');if(!o||!s){return}s.innerHTML=html;o.className='overlay on';var c=document.getElementById('fvInlineMenuClose');if(c){c.onclick=closeSheet}}
+  function head(ey,title){return '<div class="row"><div><div class="ey">'+ey+'</div><div class="stat" style="margin-top:5px">'+esc(title)+'</div></div><button class="iconbtn" id="fvInlineMenuClose">×</button></div>'}
+  function cardioSheet(){request('workout_extras',{}).then(function(d){var rows=d&&d.cardio?d.cardio:[],html=head('🏃 CARDIO','Cardio de la sesión');if(rows.length){html+='<div class="card" style="margin-top:12px">';for(var i=0;i<rows.length;i++){html+='<div class="fvCardioRow"><div><b>'+esc(rows[i].cardio_type||'Cardio')+'</b><span>'+esc(rows[i].duration_min)+' min'+(rows[i].avg_hr?' · FC '+esc(rows[i].avg_hr):'')+'</span></div><button class="fvMiniBtn danger" data-fv-cardio-delete="'+esc(rows[i].id)+'">×</button></div>'}html+='</div>'}html+='<div class="fvField"><label>Tipo</label><input class="fvText" id="fvInlineCardioType" type="text" value="HIIT"></div><div class="fvChoiceRow"><div class="fvField"><label>Minutos</label><input class="fvText" id="fvInlineCardioDuration" type="text" inputmode="numeric" placeholder="15"></div><div class="fvField"><label>FC media</label><input class="fvText" id="fvInlineCardioHr" type="text" inputmode="numeric" placeholder="Opcional"></div></div><div class="fvField"><label>Nota</label><input class="fvText" id="fvInlineCardioNote" type="text" placeholder="Opcional"></div><button class="actionbtn primary wide" style="margin-top:12px" id="fvInlineCardioAdd">Añadir cardio</button>';openSheet(html);var dels=document.querySelectorAll('[data-fv-cardio-delete]');for(var z=0;z<dels.length;z++){dels[z].onclick=function(){var id=this.getAttribute('data-fv-cardio-delete');request('delete_cardio',{id:id}).then(function(){notify('Cardio eliminado');cardioSheet()}).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})}}var add=document.getElementById('fvInlineCardioAdd');if(add){add.onclick=function(){add.disabled=true;request('add_cardio',{type:document.getElementById('fvInlineCardioType').value,duration:document.getElementById('fvInlineCardioDuration').value,avg_hr:document.getElementById('fvInlineCardioHr').value,note:document.getElementById('fvInlineCardioNote').value}).then(function(){add.disabled=false;notify('Cardio añadido');cardioSheet()}).catch(function(e){add.disabled=false;alertMsg(e&&e.message?e.message:String(e))})}}}).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})}
+  function sessionNoteSheet(){request('workout_extras',{}).then(function(d){var html=head('🗒️ NOTA DE SESIÓN','Entrenamiento')+'<div class="fvField"><label>Nota</label><textarea class="fvArea" id="fvInlineSessionNote">'+esc(d&&d.session_note?d.session_note:'')+'</textarea></div><button class="actionbtn primary wide" style="margin-top:12px" id="fvInlineSessionSave">Guardar</button>';openSheet(html);var save=document.getElementById('fvInlineSessionSave');if(save){save.onclick=function(){save.disabled=true;request('set_workout_note',{note:document.getElementById('fvInlineSessionNote').value}).then(function(){save.disabled=false;closeSheet();notify('Nota de sesión guardada')}).catch(function(e){save.disabled=false;alertMsg(e&&e.message?e.message:String(e))})}}}).catch(function(e){alertMsg(e&&e.message?e.message:String(e))})}
+  function ensureMenu(){var grid=document.querySelector('#sheet .fvMenuGrid');if(!grid){return}var cardio=document.getElementById('fvInlineCardio');if(!cardio){cardio=document.createElement('button');cardio.id='fvInlineCardio';cardio.className='fvMenuBtn';cardio.textContent='🏃 Cardio';grid.appendChild(cardio)}cardio.onclick=cardioSheet;var session=document.getElementById('fvInlineSessionNoteBtn');if(!session){session=document.createElement('button');session.id='fvInlineSessionNoteBtn';session.className='fvMenuBtn';session.textContent='🗒️ Nota sesión';grid.appendChild(session)}session.onclick=sessionNoteSheet}
+  document.addEventListener('click',function(e){var t=e.target;while(t&&t!==document&&String(t.tagName||'').toLowerCase()!=='button'){t=t.parentNode}if(t&&t.id==='fvMore'){setTimeout(ensureMenu,60)}},true);
+})();</script>`;
+
 function enhanceHtml(html) {
   if (!html.includes("enhance-v2.css")) {
     html = html.replace(
@@ -57,6 +73,7 @@ function enhanceHtml(html) {
   if (!html.includes("workout-input-context-v1.js")) html = html.replace("</body>", '<script src="/workout-input-context-v1.js?v=10964f1"></script></body>');
   if (!html.includes("advanced-v1.js")) html = html.replace("</body>", '<script src="/advanced-v1.js?v=b2fc32e"></script></body>');
   if (!html.includes('data-fv-inline-set-edit="1"')) html = html.replace("</body>", INLINE_SET_EDIT+"</body>");
+  if (!html.includes('data-fv-inline-menu-extras="1"')) html = html.replace("</body>", INLINE_MENU_EXTRAS+"</body>");
   if (!html.includes("exercise-note-v2.js")) html = html.replace("</body>", '<script src="/exercise-note-v2.js?v=2eafa8d"></script></body>');
   if (!html.includes("advanced-guards-v1.js")) html = html.replace("</body>", '<script src="/advanced-guards-v1.js?v=3bff704"></script></body>');
   if (!html.includes("manual-food-validation-v1.js")) html = html.replace("</body>", '<script src="/manual-food-validation-v1.js?v=8fd68c6"></script></body>');
