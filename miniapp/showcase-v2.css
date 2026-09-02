@@ -7,13 +7,15 @@
 .topbar .brand{letter-spacing:.075em}
 .topbar .status{font-size:10px;color:rgba(180,190,204,.64)!important}
 .topactions{display:flex!important;align-items:center!important;justify-content:flex-end;gap:8px!important;flex:0 0 auto;min-width:max-content}
-.topactions .iconbtn{display:flex!important;visibility:visible!important;opacity:1!important;width:42px!important;height:42px!important;min-width:42px!important;border-radius:14px!important;border:1px solid rgba(255,255,255,.09)!important;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.032))!important;color:#d7dee8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 7px 18px rgba(0,0,0,.16)!important;transition:transform .14s ease,border-color .18s ease,background .18s ease,color .18s ease!important}
+.topactions .iconbtn{position:relative;display:flex!important;visibility:visible!important;opacity:1!important;width:42px!important;height:42px!important;min-width:42px!important;border-radius:14px!important;border:1px solid rgba(255,255,255,.09)!important;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.032))!important;color:#d7dee8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 7px 18px rgba(0,0,0,.16)!important;transition:transform .14s ease,border-color .18s ease,background .18s ease,color .18s ease!important}
 .topactions .iconbtn:active{transform:scale(.94)!important}
-#refresh{display:flex!important;visibility:visible!important;opacity:1!important;order:1}
-#fvFullscreenBtn{order:2}
+#refresh{display:flex!important;visibility:visible!important;opacity:1!important;order:1;font-size:0!important}
+#fvFullscreenBtn{order:2;font-size:0!important}
 .topactions .beta{order:3;margin-left:1px;font-size:8px!important;line-height:1;letter-spacing:.14em!important;padding:7px 10px!important;border-radius:999px!important;color:rgba(164,239,190,.72)!important;border:1px solid rgba(103,228,147,.17)!important;background:rgba(103,228,147,.045)!important;box-shadow:none!important}
-#refresh.fvIconReady{font-size:0!important}
-#refresh .fvActionSvg{display:block!important;width:19px!important;height:19px!important;stroke-width:2.15!important}
+#refresh .fvActionSvg{display:none!important}
+#refresh:before{content:'';width:17px;height:17px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;transform:rotate(-28deg)}
+#refresh:after{content:'';position:absolute;right:10px;top:10px;width:0;height:0;border-left:4px solid currentColor;border-top:3px solid transparent;border-bottom:3px solid transparent;transform:rotate(18deg)}
+#fvFullscreenBtn:before{content:'';width:18px;height:18px;background:linear-gradient(currentColor,currentColor) left top/7px 2px no-repeat,linear-gradient(currentColor,currentColor) left top/2px 7px no-repeat,linear-gradient(currentColor,currentColor) right top/7px 2px no-repeat,linear-gradient(currentColor,currentColor) right top/2px 7px no-repeat,linear-gradient(currentColor,currentColor) left bottom/7px 2px no-repeat,linear-gradient(currentColor,currentColor) left bottom/2px 7px no-repeat,linear-gradient(currentColor,currentColor) right bottom/7px 2px no-repeat,linear-gradient(currentColor,currentColor) right bottom/2px 7px no-repeat}
 #fvFullscreenBtn.on{color:var(--accent2)!important;border-color:rgba(103,228,147,.25)!important;background:rgba(103,228,147,.08)!important}
 
 /* Bottom navigation: product tab bar, not dashboard buttons */
@@ -63,6 +65,7 @@
 
 @media(max-width:390px){
   .topactions{gap:6px!important}.topactions .iconbtn{width:39px!important;height:39px!important;min-width:39px!important;border-radius:13px!important}.topactions .beta{padding:6px 8px!important}
+  #refresh:after{right:9px;top:9px}
   .navin{gap:4px!important;padding:0 2px}.nav button{min-height:60px!important;border-radius:15px!important}.fvNavIcon{width:32px!important;height:27px!important}.fvNavSvg{width:20px!important;height:20px!important}
   #fvOpenPrs{min-width:62px!important;padding:0 10px!important}
 }
