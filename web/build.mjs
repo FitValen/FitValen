@@ -19,6 +19,7 @@ const gateStyle = `<style data-fv-web-login-gate="1">html.fv-web-logged-out .nav
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
   var WEB_DAY='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-day';
+  var WEB_WEIGHT='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-weight';
   var nativeFetch=window.fetch.bind(window);
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
   function syncGate(){var root=document.documentElement,loggedOut=!token();if(loggedOut){if((' '+root.className+' ').indexOf(' fv-web-logged-out ')<0){root.className=(root.className+' fv-web-logged-out').replace(/^\\s+|\\s+$/g,'')}}else{root.className=(' '+root.className+' ').replace(' fv-web-logged-out ',' ').replace(/^\\s+|\\s+$/g,'')}}
@@ -40,7 +41,9 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
     h.delete('x-telegram-init-data');
     h.set('authorization','Bearer '+t);
     h.set('content-type','application/json');
-    var endpoint=actionFromBody(init.body)==='start_day'?WEB_DAY:WEB_API;
+    var action=actionFromBody(init.body),endpoint=WEB_API;
+    if(action==='start_day'){endpoint=WEB_DAY}
+    if(action==='set_weight'){endpoint=WEB_WEIGHT}
     return nativeFetch(endpoint,{method:'POST',headers:h,body:init.body}).then(function(r){
       if(r.status===401){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}setTimeout(function(){location.reload()},30)}
       return r;
@@ -71,4 +74,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated backend + automatic day start + login nav gate)");
+console.log("FitValen Web V1 built from miniapp source -> web/dist (automatic day + secure weight writes)");
