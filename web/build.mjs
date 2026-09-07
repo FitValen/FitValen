@@ -14,15 +14,54 @@ await cp(source, out, { recursive: true });
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
 
-// Web V1 starts from the current Telegram Mini App source without touching production.
-// Web authentication is isolated from Telegram and never stores the raw password in the frontend.
+const adapter = `<script data-fv-web-adapter="1">(function(){
+  var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
+  var nativeFetch=window.fetch.bind(window);
+  function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
+  function isMiniAppCall(input,init){
+    if(!init||String(init.method||'GET').toUpperCase()!=='POST'){return false}
+    var url=typeof input==='string'?input:(input&&input.url?input.url:'');
+    if(url!==window.location.href){return false}
+    var h=init.headers||{};
+    if(typeof Headers!=='undefined'&&h instanceof Headers){return h.has('x-telegram-init-data')}
+    return Object.prototype.hasOwnProperty.call(h,'x-telegram-init-data')||Object.prototype.hasOwnProperty.call(h,'X-Telegram-Init-Data');
+  }
+  window.fetch=function(input,init){
+    if(!isMiniAppCall(input,init)){return nativeFetch(input,init)}
+    var t=token();
+    if(!t){return Promise.resolve(new Response(JSON.stringify({ok:false,error:'unauthorized'}),{status:401,headers:{'content-type':'application/json'}}))}
+    var h=new Headers(init.headers||{});
+    h.delete('x-telegram-init-data');
+    h.set('authorization','Bearer '+t);
+    h.set('content-type','application/json');
+    return nativeFetch(WEB_API,{method:'POST',headers:h,body:init.body}).then(function(r){
+      if(r.status===401){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}setTimeout(function(){location.reload()},30)}
+      return r;
+    });
+  };
+})();</script>`;
+
 html = html
   .replace("<title>FitValen</title>", "<title>FitValen Web</title>")
   .replace('<script src="https://telegram.org/js/telegram-web-app.js"></script>', "")
+  .replace("</head>", adapter + "</head>")
   .replace(
     "status.textContent='Abre desde Telegram';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Mini App</div><div class=\"big\" style=\"font-size:27px\">Sesión no disponible</div><div class=\"small\">Abre FitValen desde el botón del bot.</div></div>';return",
-    "var webToken='';try{webToken=localStorage.getItem('fitvalen_web_session')||''}catch(ignore){}if(!webToken){status.textContent='Acceso privado';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Web</div><div class=\"big\" style=\"font-size:27px\">Iniciar sesión</div><div class=\"small\">Acceso privado a FitValen.</div></div><div class=\"card\"><div class=\"fvField\"><label>Usuario</label><input class=\"input\" id=\"fvWebUser\" type=\"text\" autocomplete=\"username\" value=\"Dani\"></div><div class=\"fvField\" style=\"margin-top:10px\"><label>Contraseña</label><input class=\"input\" id=\"fvWebPass\" type=\"password\" autocomplete=\"current-password\" placeholder=\"••••••••\"></div><button class=\"actionbtn primary wide\" style=\"margin-top:12px\" id=\"fvWebLogin\">Entrar</button><div class=\"small\" id=\"fvWebLoginMsg\" style=\"margin-top:10px\"></div></div>';var loginBtn=get('fvWebLogin'),userInput=get('fvWebUser'),passInput=get('fvWebPass'),msg=get('fvWebLoginMsg');function doWebLogin(){if(!loginBtn||loginBtn.disabled){return}var u=String(userInput&&userInput.value||'').replace(/^\\s+|\\s+$/g,''),p=String(passInput&&passInput.value||'');if(!u||!p){if(msg){msg.textContent='Introduce usuario y contraseña.'}return}loginBtn.disabled=true;if(msg){msg.textContent='Comprobando…'}fetch('https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({username:u,password:p})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok||!j.data||!j.data.token){if(j&&j.error==='too_many_attempts'){throw new Error('Demasiados intentos. Prueba de nuevo más tarde.')}throw new Error('Usuario o contraseña incorrectos.')}return j.data})}).then(function(d){try{localStorage.setItem('fitvalen_web_session',d.token);localStorage.setItem('fitvalen_web_session_expires',d.expires_at||'')}catch(e){}if(passInput){passInput.value=''}location.reload()}).catch(function(e){loginBtn.disabled=false;if(passInput){passInput.value=''}if(msg){msg.textContent=e&&e.message?e.message:String(e)}})}if(loginBtn){loginBtn.onclick=doWebLogin}if(passInput){passInput.onkeydown=function(e){if(e.key==='Enter'){doWebLogin()}}}return}status.textContent='Web · sesión activa';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Web</div><div class=\"big\" style=\"font-size:27px\">Sesión web activa</div><div class=\"small\">Autenticación web correcta. El siguiente paso es conectar esta sesión a los mismos datos reales de FitValen.</div></div><div class=\"card brain\"><div class=\"ey\">⚡ Transición segura</div><div class=\"braintext\">Telegram y producción siguen intactos.</div></div><button class=\"actionbtn wide\" id=\"fvWebLogout\">Cerrar sesión</button>';var logout=get('fvWebLogout');if(logout){logout.onclick=function(){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}location.reload()}}return"
+    "var webToken='';try{webToken=localStorage.getItem('fitvalen_web_session')||''}catch(ignore){}if(!webToken){status.textContent='Acceso privado';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Web</div><div class=\"big\" style=\"font-size:27px\">Iniciar sesión</div><div class=\"small\">Acceso privado a FitValen.</div></div><div class=\"card\"><div class=\"fvField\"><label>Usuario</label><input class=\"input\" id=\"fvWebUser\" type=\"text\" autocomplete=\"username\" value=\"Dani\"></div><div class=\"fvField\" style=\"margin-top:10px\"><label>Contraseña</label><input class=\"input\" id=\"fvWebPass\" type=\"password\" autocomplete=\"current-password\" placeholder=\"••••••••\"></div><button class=\"actionbtn primary wide\" style=\"margin-top:12px\" id=\"fvWebLogin\">Entrar</button><div class=\"small\" id=\"fvWebLoginMsg\" style=\"margin-top:10px\"></div></div>';var loginBtn=get('fvWebLogin'),userInput=get('fvWebUser'),passInput=get('fvWebPass'),msg=get('fvWebLoginMsg');function doWebLogin(){if(!loginBtn||loginBtn.disabled){return}var u=String(userInput&&userInput.value||'').replace(/^\\s+|\\s+$/g,''),p=String(passInput&&passInput.value||'');if(!u||!p){if(msg){msg.textContent='Introduce usuario y contraseña.'}return}loginBtn.disabled=true;if(msg){msg.textContent='Comprobando…'}fetch('https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({username:u,password:p})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok||!j.data||!j.data.token){if(j&&j.error==='too_many_attempts'){throw new Error('Demasiados intentos. Prueba de nuevo más tarde.')}throw new Error('Usuario o contraseña incorrectos.')}return j.data})}).then(function(d){try{localStorage.setItem('fitvalen_web_session',d.token);localStorage.setItem('fitvalen_web_session_expires',d.expires_at||'')}catch(e){}if(passInput){passInput.value=''}location.reload()}).catch(function(e){loginBtn.disabled=false;if(passInput){passInput.value=''}if(msg){msg.textContent=e&&e.message?e.message:String(e)}})}if(loginBtn){loginBtn.onclick=doWebLogin}if(passInput){passInput.onkeydown=function(e){if(e.key==='Enter'){doWebLogin()}}}return}initData='web-session';status.textContent='Web · conectado'"
   );
 
+const logout = `<script data-fv-web-logout="1">(function(){
+  function install(){
+    var top=document.querySelector('.topactions');
+    if(!top||document.getElementById('fvWebLogout')){return}
+    var b=document.createElement('button');
+    b.id='fvWebLogout';b.className='iconbtn';b.title='Cerrar sesión';b.textContent='↪';
+    b.onclick=function(){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}location.reload()};
+    top.appendChild(b);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',install)}else{install()}
+})();</script>`;
+html = html.replace("</body>", logout + "</body>");
+
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from miniapp source -> web/dist");
+console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated read-only backend)");
