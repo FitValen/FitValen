@@ -17,8 +17,6 @@ await cp(resolve(here, "web-performance-v2.css"), resolve(out, "web-performance-
 await cp(resolve(here, "web-performance-v2.js"), resolve(out, "web-performance-v2.js"));
 await cp(resolve(here, "ux-polish-v3.css"), resolve(out, "ux-polish-v3.css"));
 await cp(resolve(here, "ux-polish-v3.js"), resolve(out, "ux-polish-v3.js"));
-await cp(resolve(here, "premium-product-v4.css"), resolve(out, "premium-product-v4.css"));
-await cp(resolve(here, "premium-product-v4.js"), resolve(out, "premium-product-v4.js"));
 
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
@@ -36,9 +34,8 @@ const productionCss = [
   "home-performance-v1.css",
   "light-performance-v1.css",
   "web-performance-v2.css",
-  "ux-polish-v3.css",
-  "premium-product-v4.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=8">'}).join("");
+  "ux-polish-v3.css"
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=9">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -86,7 +83,7 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
 const productionLoader = `<script data-fv-web-production-loader="1">(function(){
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
   if(!token()){return}
-  var files=['fullscreen-safe-v2.js','enhance-v2.js','@wait-workout','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js','fullscreen-v1.js','home-performance-v1.js','web-performance-v2.js','ux-polish-v3.js','premium-product-v4.js'];
+  var files=['fullscreen-safe-v2.js','enhance-v2.js','@wait-workout','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js','fullscreen-v1.js','home-performance-v1.js','web-performance-v2.js','ux-polish-v3.js'];
   var i=0;
   function next(){
     if(i>=files.length){return}
@@ -96,14 +93,14 @@ const productionLoader = `<script data-fv-web-production-loader="1">(function(){
       (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
       return;
     }
-    var s=document.createElement('script');s.src='/'+file+'?web=8';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+    var s=document.createElement('script');s.src='/'+file+'?web=9';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
   }
   next();
 })();</script>`;
 
 html = html
   .replace("<title>FitValen</title>", "<title>FitValen Web</title>")
-  .replace('<meta name="theme-color" content="#090b0f">', '<meta name="theme-color" content="#f3f6f4">')
+  .replace('<meta name="theme-color" content="#090b0f">', '<meta name="theme-color" content="#f5f7f6">')
   .replace('<script src="https://telegram.org/js/telegram-web-app.js"></script>', "")
   .replace("</head>", gateStyle + productionCss + adapter + "</head>")
   .replace(/Entreno editable en la siguiente fase/g, "Entrenamiento disponible")
@@ -127,4 +124,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", productionLoader + logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built -> Premium Product UI v4");
+console.log("FitValen Web V1 built -> stable Light Performance v3");
