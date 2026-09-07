@@ -24,7 +24,7 @@ const productionCss = [
   "logo-fix-v1.css",
   "exercise-note-v1.css",
   "production-polish-v1.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=2">'}).join("");
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=3">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -72,9 +72,18 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
 const productionLoader = `<script data-fv-web-production-loader="1">(function(){
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
   if(!token()){return}
-  var files=['fullscreen-safe-v2.js','enhance-v2.js','workout-v2.js','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js','fullscreen-v1.js'];
+  var files=['fullscreen-safe-v2.js','enhance-v2.js','@wait-workout','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js','fullscreen-v1.js'];
   var i=0;
-  function next(){if(i>=files.length){return}var s=document.createElement('script');s.src='/'+files[i]+'?web=2';s.setAttribute('data-fv-web-production','1');i++;s.onload=next;s.onerror=next;document.body.appendChild(s)}
+  function next(){
+    if(i>=files.length){return}
+    var file=files[i++];
+    if(file==='@wait-workout'){
+      var tries=0;
+      (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
+      return;
+    }
+    var s=document.createElement('script');s.src='/'+file+'?web=3';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+  }
   next();
 })();</script>`;
 
