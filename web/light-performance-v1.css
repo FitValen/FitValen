@@ -1,0 +1,196 @@
+/* FitValen Web · Light Performance v1
+   Tema visual web. No modifica lógica, datos ni flujos. */
+
+:root{
+  --bg:#f4f7f5!important;
+  --panel:#ffffff!important;
+  --panel2:#f8faf9!important;
+  --text:#111619!important;
+  --muted:#75808a!important;
+  --soft:#46515b!important;
+  --accent:#72e39a!important;
+  --accent2:#168a4b!important;
+  --danger:#c94f4b!important;
+  --warning:#9c6b16!important;
+  --line:rgba(20,30,35,.09)!important;
+  --shadow:0 8px 24px rgba(24,38,32,.07)!important;
+}
+
+html,body{
+  background:#f4f7f5!important;
+  color:#111619!important;
+  color-scheme:light!important;
+}
+body{
+  background:linear-gradient(180deg,#f8faf9 0,#f4f7f5 240px)!important;
+}
+
+/* Chrome */
+.app{background:transparent!important}
+.topbar{
+  border-color:rgba(20,30,35,.08)!important;
+  background:rgba(248,250,249,.94)!important;
+  box-shadow:none!important;
+}
+.topbar .brand{color:#111619!important;font-weight:750!important}
+.topbar .status{color:#7a858f!important}
+.topbar .logo{background:#eef3f0!important;box-shadow:none!important}
+.topactions .iconbtn,.iconbtn{
+  border-color:rgba(20,30,35,.09)!important;
+  background:#ffffff!important;
+  color:#4f5b65!important;
+  box-shadow:none!important;
+}
+.topactions .beta{background:#eaf8ef!important;border-color:#ccebd7!important;color:#23784a!important}
+
+.nav{
+  background:rgba(250,252,251,.97)!important;
+  border-top-color:rgba(20,30,35,.08)!important;
+  box-shadow:0 -8px 24px rgba(24,38,32,.055)!important;
+}
+.nav button{color:#7a858f!important;background:transparent!important;font-weight:650!important}
+.nav button.on{color:#177744!important;background:#edf8f1!important;box-shadow:none!important}
+.nav button.on .fvNavIcon{color:#17844a!important;background:transparent!important;box-shadow:none!important}
+
+/* Typography */
+.ey{color:#7a858f!important;font-weight:650!important}
+.sectiontitle{color:#242b30!important;font-weight:700!important}
+.sectionmeta,.small,.timelineMeta,.mealmeta,.foodmeta,.exlast,.pstats{color:#7a858f!important}
+.big,.stat,.timelineTitle,.mealname,.foodname,.exname{color:#111619!important}
+.soft{color:#46515b!important}
+
+/* Common surfaces */
+.hero,.card,.mealcard,.exerciseCard,.chartcard,.metric,.fvTrendHero,.fvPeriod,.fvPrGrid>div,.fvSummaryGrid>div{
+  background:#ffffff!important;
+  border-color:rgba(20,30,35,.08)!important;
+  box-shadow:0 7px 20px rgba(24,38,32,.055)!important;
+}
+.hero:after{background:rgba(114,227,154,.12)!important}
+.metric,.mealcard,.exerciseCard{box-shadow:0 4px 14px rgba(24,38,32,.045)!important}
+
+.pill{
+  background:#f1f4f2!important;
+  border-color:rgba(20,30,35,.08)!important;
+  color:#5e6972!important;
+  font-weight:650!important;
+}
+.pill.good{background:#eaf8ef!important;border-color:#c8ead4!important;color:#23784a!important}
+.pill.warn{background:#fff6df!important;border-color:#efdca9!important;color:#8d641c!important}
+
+.progressbar,.fvGoalTrack,.barMini{background:#e7ece9!important}
+.progressbar i,.barMini i{background:#65d98d!important}
+
+/* Buttons */
+.actionbtn,.fvToolBtn,.fvMenuBtn,.optionbtn,.fvProduct,.fvMiniBtn,.daychip,.fvMore,.fvNav button,.fvTimers button,.fvLastTools button{
+  background:#ffffff!important;
+  border-color:rgba(20,30,35,.10)!important;
+  color:#263038!important;
+  box-shadow:none!important;
+  font-weight:650!important;
+}
+.actionbtn.primary,.fvPrimary,#fvFinishDayBtn{
+  background:#72e39a!important;
+  border-color:#72e39a!important;
+  color:#0b311a!important;
+  box-shadow:0 5px 14px rgba(73,183,113,.16)!important;
+}
+.actionbtn.danger,.fvMenuBtn.danger,.fvToolBtn.danger,.fvMiniBtn.danger{
+  background:#fff4f3!important;
+  border-color:#f0cfcc!important;
+  color:#b64743!important;
+}
+.actionbtn:disabled,.fvToolBtn:disabled{opacity:.45!important}
+
+/* Forms */
+.input,.fvText,.fvSelect,.fvArea,.fvSetInput{
+  background:#ffffff!important;
+  border-color:rgba(20,30,35,.12)!important;
+  color:#111619!important;
+  box-shadow:none!important;
+}
+.input::placeholder,.fvText::placeholder,.fvArea::placeholder,.fvSetInput::placeholder{color:#a1aab2!important}
+.input:focus,.fvText:focus,.fvSelect:focus,.fvArea:focus,.fvSetInput:focus{
+  border-color:#65d98d!important;
+  box-shadow:0 0 0 3px rgba(101,217,141,.16)!important;
+}
+.fvField label{color:#75808a!important}
+.fvCheck{background:#ffffff!important;border-color:rgba(20,30,35,.09)!important;color:#263038!important}
+
+/* Diet */
+.mealcard.enabled{border-color:rgba(20,30,35,.09)!important}
+.mealKcal{color:#23784a!important}
+.foodrow,.selection,.timelineRow,.fvWorkoutRow,.fvCardioRow,.fvPrRow,.fvHistoryRow{border-bottom-color:rgba(20,30,35,.075)!important}
+.quickMealBtn{background:#ffffff!important;border-color:rgba(20,30,35,.08)!important;color:#111619!important;box-shadow:0 4px 14px rgba(24,38,32,.045)!important}
+.quickMealDesc,.quickMealsHead .sectionmeta{color:#7a858f!important}
+.quickMealKcal{color:#23784a!important}
+
+/* Workout */
+.daychips{background:transparent!important}
+.daychip.on{background:#e8f8ee!important;border-color:#bfe7cd!important;color:#23784a!important}
+.activebanner,.fvStartCard,.fvFocusCard{
+  background:#ffffff!important;
+  border-color:#cbe9d5!important;
+  box-shadow:0 7px 20px rgba(24,38,32,.055)!important;
+}
+.fvEy,.fvFocusDay,.fvSuggested,.excode,.fvFocusCode{color:#23784a!important}
+.excode,.fvFocusCode,.fvWorkoutDay{background:#eaf8ef!important;border-color:#d0ebd9!important;color:#23784a!important}
+.workStat{background:#ffffff!important;border-color:rgba(20,30,35,.08)!important}
+.fvReference,.fvRest,.fvSetChip,.fvNav button,.fvTimers button,.fvLastTools button{background:#f8faf9!important;border-color:rgba(20,30,35,.08)!important}
+.fvSetChip i,.fvReferenceLabel,.fvHint{color:#7a858f!important}
+.fvTimerDisplay{color:#46515b!important}.fvTimerDisplay.running{color:#23784a!important}
+.fvTimers button.on{background:#eaf8ef!important;border-color:#bfe7cd!important;color:#23784a!important}
+.fvRoutineBtn{color:#111619!important;border-bottom-color:rgba(20,30,35,.075)!important}
+.fvRoutineBtn.active{background:#eef8f2!important}
+.fvRoutineBtn b{color:#23784a!important}
+
+/* Progress */
+.fvTrendHero{background:#ffffff!important;border-color:#d4ebdc!important}
+.chartLine{stroke:#38b96b!important}
+.chartGrid{stroke:rgba(20,30,35,.08)!important}
+.fvWeightPoint{fill:#ffffff!important;stroke:#38b96b!important}.fvWeightPoint.current{fill:#38b96b!important;stroke:#ffffff!important}
+.fvWorkoutDay{background:#eaf8ef!important;color:#23784a!important}
+.fvTrendStat.up{color:#21834a!important}.fvTrendStat.flat{color:#65717b!important}.fvTrendStat.stall{color:#947022!important}.fvTrendStat.down{color:#b8514d!important}
+
+/* Sheets and overlays */
+.overlay{background:rgba(35,45,40,.28)!important}
+.overlay.on .sheet,.sheet{
+  background:#ffffff!important;
+  border-color:rgba(20,30,35,.09)!important;
+  box-shadow:0 -18px 52px rgba(24,38,32,.14)!important;
+}
+.grab{background:#d9dfdc!important}
+.toast{background:#18201c!important;color:#ffffff!important;box-shadow:0 8px 22px rgba(24,38,32,.16)!important}
+
+/* Home Performance UI · light */
+#home.fvHomePerformance{
+  --hp-bg:#f4f7f5!important;
+  --hp-surface:#ffffff!important;
+  --hp-surface-raised:#f8faf9!important;
+  --hp-text:#111619!important;
+  --hp-muted:#75808a!important;
+  --hp-line:rgba(20,30,35,.09)!important;
+  --hp-accent:#72e39a!important;
+}
+#home.fvHomePerformance .hero .big,#home.fvHomePerformance .timelineTitle,#home.fvHomePerformance>.sectionhead .sectiontitle{color:#111619!important}
+#home.fvHomePerformance .hero>.row>.pill{color:#63707a!important;border-color:rgba(20,30,35,.10)!important}
+#home.fvHomePerformance .hero>.row>.pill.good{color:#23784a!important;border-color:#c8ead4!important;background:#eaf8ef!important}
+#home.fvHomePerformance .fvGoalTrack{background:#e4eae6!important}
+#home.fvHomePerformance .fvGoalTrack .fvGoalBand{background:#d9f3e2!important}
+#home.fvHomePerformance .hero>.grid3{border-color:rgba(20,30,35,.09)!important}
+#home.fvHomePerformance .hero>.grid3 .metric{border-right-color:rgba(20,30,35,.09)!important}
+#home.fvHomePerformance .timelineIcon{background:#eef3f0!important;color:#52605a!important}
+#home.fvHomePerformance .card.brain{border-top-color:rgba(20,30,35,.09)!important}
+#home.fvHomePerformance .braintext{color:#4f5a63!important}
+#home.fvHomePerformance #fvDayTools .fvToolBtn{background:#ffffff!important;border-color:rgba(20,30,35,.10)!important;color:#263038!important}
+#home.fvHomePerformance #fvFinishDayBtn{background:#72e39a!important;border-color:#72e39a!important;color:#0b311a!important}
+#home.fvHomePerformance #fvClosedBanner{background:#eaf8ef!important;color:#23784a!important}
+
+/* Login */
+html.fv-web-logged-out body{background:#f4f7f5!important}
+html.fv-web-logged-out .topbar{background:transparent!important;border-color:transparent!important}
+html.fv-web-logged-out #home .hero,html.fv-web-logged-out #home .card{background:#ffffff!important;border-color:rgba(20,30,35,.08)!important;box-shadow:0 8px 24px rgba(24,38,32,.06)!important}
+
+@media(max-width:390px){
+  body{background:#f4f7f5!important}
+  .topbar{background:rgba(248,250,249,.97)!important}
+}
