@@ -12,6 +12,7 @@ await mkdir(out, { recursive: true });
 await cp(source, out, { recursive: true });
 await cp(resolve(here, "home-performance-v1.css"), resolve(out, "home-performance-v1.css"));
 await cp(resolve(here, "home-performance-v1.js"), resolve(out, "home-performance-v1.js"));
+await cp(resolve(here, "light-performance-v1.css"), resolve(out, "light-performance-v1.css"));
 
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
@@ -26,8 +27,9 @@ const productionCss = [
   "logo-fix-v1.css",
   "exercise-note-v1.css",
   "production-polish-v1.css",
-  "home-performance-v1.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=4">'}).join("");
+  "home-performance-v1.css",
+  "light-performance-v1.css"
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=5">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -85,13 +87,14 @@ const productionLoader = `<script data-fv-web-production-loader="1">(function(){
       (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
       return;
     }
-    var s=document.createElement('script');s.src='/'+file+'?web=4';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+    var s=document.createElement('script');s.src='/'+file+'?web=5';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
   }
   next();
 })();</script>`;
 
 html = html
   .replace("<title>FitValen</title>", "<title>FitValen Web</title>")
+  .replace('<meta name="theme-color" content="#090b0f">', '<meta name="theme-color" content="#f4f7f5">')
   .replace('<script src="https://telegram.org/js/telegram-web-app.js"></script>', "")
   .replace("</head>", gateStyle + productionCss + adapter + "</head>")
   .replace(/Entreno editable en la siguiente fase/g, "Entrenamiento disponible")
@@ -115,4 +118,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", productionLoader + logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from Telegram production UI -> authenticated full web gateway + Home Performance UI");
+console.log("FitValen Web V1 built -> authenticated full gateway + Light Performance UI");
