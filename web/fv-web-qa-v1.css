@@ -41,6 +41,40 @@ html.fv-web .fvChoiceRow>*,
 html.fv-web #progress .fvWorkoutRow>*{min-width:0!important}
 html.fv-web #progress .chartBox svg{display:block!important;width:100%!important;height:100%!important}
 
+/* Estado de hoy: respiración interior y badges contenidos. */
+html.fv-web #home .card.timeline{
+  padding:8px 12px!important;
+  overflow:hidden!important;
+}
+html.fv-web #home .timelineRow{
+  grid-template-columns:38px minmax(0,1fr) minmax(68px,max-content)!important;
+  gap:11px!important;
+  padding:13px 2px!important;
+}
+html.fv-web #home .timelineRow>.pill{
+  justify-self:end!important;
+  max-width:96px!important;
+  white-space:normal!important;
+  text-align:center!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Comidas del plan comparte la misma estructura visual que Comidas rápidas. */
+html.fv-web #diet .mealgrid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;
+}
+html.fv-web #diet .mealcard{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:stretch!important;
+  min-height:112px!important;
+  padding:12px!important;
+}
+html.fv-web #diet .mealcard>.row{min-height:24px!important}
+html.fv-web #diet .mealname{margin-top:10px!important}
+html.fv-web #diet .mealKcal{margin-top:auto!important;padding-top:8px!important}
+
 /* Bottom sheets: altura real del viewport y scroll estable con teclado móvil. */
 html.fv-web .overlay{overscroll-behavior:contain!important}
 html.fv-web .sheet{
@@ -62,7 +96,8 @@ html.fv-web .sheet{
 
   /* 375–430 px admiten dos columnas sin comprometer legibilidad. */
   html.fv-web .grid2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  html.fv-web #diet .quickMealsGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html.fv-web #diet .quickMealsGrid,
+  html.fv-web #diet .mealgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
 @media(max-width:390px){
@@ -70,10 +105,23 @@ html.fv-web .sheet{
   html.fv-web .sectionhead{align-items:flex-start!important}
   html.fv-web .sectionmeta{max-width:48%!important}
   html.fv-web #progress .fvPeriod b{font-size:13px!important}
+
+  /* En pantallas estrechas el estado se apila sin acercarse al borde derecho. */
+  html.fv-web #home .timelineRow{
+    grid-template-columns:36px minmax(0,1fr)!important;
+    align-items:start!important;
+  }
+  html.fv-web #home .timelineRow>.pill{
+    grid-column:2!important;
+    justify-self:start!important;
+    max-width:100%!important;
+    margin-top:1px!important;
+  }
 }
 
 @media(max-width:340px){
-  html.fv-web #diet .quickMealsGrid{grid-template-columns:1fr!important}
+  html.fv-web #diet .quickMealsGrid,
+  html.fv-web #diet .mealgrid{grid-template-columns:1fr!important}
   html.fv-web #home .actionRow,
   html.fv-web .fvInlineTools,
   html.fv-web .fvInlineTools.three{grid-template-columns:1fr!important}
