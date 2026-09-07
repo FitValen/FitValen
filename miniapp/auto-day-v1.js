@@ -2,10 +2,7 @@
   var autoStarting=false;
   var GOAL_MIN=2000,GOAL_MAX=2300,WATER_LITERS=4;
   function removeManualEnd(){
-    var b=document.getElementById('fvFinishDayBtn');
-    if(b&&b.parentNode){b.parentNode.removeChild(b)}
-    var tools=document.getElementById('fvDayTools');
-    if(tools){tools.className='fvInlineTools'}
+    /* Web: el día se inicia automáticamente, pero el cierre manual debe seguir disponible. */
   }
   function autoStart(){
     var b=document.getElementById('startDay');
