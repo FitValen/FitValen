@@ -10,32 +10,67 @@ const out = resolve(here, "dist");
 await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 await cp(source, out, { recursive: true });
-await cp(resolve(here, "home-performance-v1.css"), resolve(out, "home-performance-v1.css"));
-await cp(resolve(here, "home-performance-v1.js"), resolve(out, "home-performance-v1.js"));
-await cp(resolve(here, "light-performance-v1.css"), resolve(out, "light-performance-v1.css"));
-await cp(resolve(here, "web-performance-v2.css"), resolve(out, "web-performance-v2.css"));
-await cp(resolve(here, "web-performance-v2.js"), resolve(out, "web-performance-v2.js"));
-await cp(resolve(here, "ux-polish-v3.css"), resolve(out, "ux-polish-v3.css"));
-await cp(resolve(here, "ux-polish-v3.js"), resolve(out, "ux-polish-v3.js"));
+await cp(resolve(here, "fv-web-foundation-v1.css"), resolve(out, "fv-web-foundation-v1.css"));
+
+/*
+ * Web-only compatibility patches.
+ * We keep the proven functional Mini App modules, but remove the pieces that
+ * mutate browser chrome or inject Telegram-only visual CSS at runtime.
+ * Source files under miniapp/ remain untouched for Telegram production.
+ */
+const guardsPath = resolve(out, "advanced-guards-v1.js");
+let guards = await readFile(guardsPath, "utf8");
+const guardsBefore = guards;
+guards = guards.replace(
+  /  function patchChrome\(\)\{[^\n]*\}\n  function patchProgress\(\)\{/,
+  "  function patchChrome(){var status=document.getElementById('status');if(status&&text(status).indexOf('Conectado')===0&&text(status)!=='Conectado'){status.textContent='Conectado'}}\n  function patchProgress(){"
+);
+if (guards === guardsBefore) {
+  throw new Error("FitValen Web build guard: patchChrome signature changed");
+}
+await writeFile(guardsPath, guards, "utf8");
+
+const enhancePath = resolve(out, "enhance-v2.js");
+let enhance = await readFile(enhancePath, "utf8");
+const enhanceBefore = enhance;
+enhance = enhance.replace(
+  /\n\(function\(\)\{\n  function loadSafeArea\(\)[\s\S]*?\n\}\)\(\);\s*$/,
+  "\n"
+);
+if (enhance === enhanceBefore) {
+  throw new Error("FitValen Web build guard: Telegram safe-area loader signature changed");
+}
+await writeFile(enhancePath, enhance, "utf8");
+
+const autoDayPath = resolve(out, "auto-day-v1.js");
+let autoDay = await readFile(autoDayPath, "utf8");
+const autoDayBefore = autoDay;
+autoDay = autoDay.replace(
+  /  function installGoalStyles\(\)\{[\s\S]*?\n  \}\n  function currentCalories\(\)\{/,
+  "  function installGoalStyles(){/* Web visual ownership: fv-web-foundation-v1.css */}\n  function currentCalories(){"
+);
+if (autoDay === autoDayBefore) {
+  throw new Error("FitValen Web build guard: dashboard goal style signature changed");
+}
+await writeFile(autoDayPath, autoDay, "utf8");
 
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
 
 const gateStyle = `<style data-fv-web-login-gate="1">html.fv-web-logged-out .nav{display:none!important}html.fv-web-logged-out body{padding-bottom:0!important}</style>`;
 
+/*
+ * CSS architecture for Web:
+ * 1) inline base from Mini App = structural fallback
+ * 2) workout/advanced/note = structural styles for generated functional DOM
+ * 3) fv-web-foundation-v1.css = the only Web visual owner, loaded last
+ */
 const productionCss = [
-  "enhance-v2.css",
   "workout-v1.css",
-  "fullscreen-v1.css",
   "advanced-v1.css",
-  "logo-fix-v1.css",
   "exercise-note-v1.css",
-  "production-polish-v1.css",
-  "home-performance-v1.css",
-  "light-performance-v1.css",
-  "web-performance-v2.css",
-  "ux-polish-v3.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=9">'}).join("");
+  "fv-web-foundation-v1.css"
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=10">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -80,10 +115,15 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
   };
 })();</script>`;
 
+/*
+ * Only functional runtime modules are loaded here.
+ * Removed from Web: fullscreen chrome, home-performance, web-performance and
+ * ux-polish visual mutators. They remain in repository history, not runtime.
+ */
 const productionLoader = `<script data-fv-web-production-loader="1">(function(){
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
   if(!token()){return}
-  var files=['fullscreen-safe-v2.js','enhance-v2.js','@wait-workout','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js','fullscreen-v1.js','home-performance-v1.js','web-performance-v2.js','ux-polish-v3.js'];
+  var files=['enhance-v2.js','@wait-workout','workout-input-context-v1.js','advanced-v1.js','exercise-note-v2.js','advanced-guards-v1.js','manual-food-validation-v1.js','diet-reopen-refresh-v1.js','auto-day-v1.js','header-logo-v1.js'];
   var i=0;
   function next(){
     if(i>=files.length){return}
@@ -93,12 +133,13 @@ const productionLoader = `<script data-fv-web-production-loader="1">(function(){
       (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
       return;
     }
-    var s=document.createElement('script');s.src='/'+file+'?web=9';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+    var s=document.createElement('script');s.src='/'+file+'?web=10';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
   }
   next();
 })();</script>`;
 
 html = html
+  .replace('<html lang="es">', '<html lang="es" class="fv-web">')
   .replace("<title>FitValen</title>", "<title>FitValen Web</title>")
   .replace('<meta name="theme-color" content="#090b0f">', '<meta name="theme-color" content="#f5f7f6">')
   .replace('<script src="https://telegram.org/js/telegram-web-app.js"></script>', "")
@@ -115,7 +156,7 @@ const logout = `<script data-fv-web-logout="1">(function(){
     var top=document.querySelector('.topactions');
     if(!top||document.getElementById('fvWebLogout')){return}
     var b=document.createElement('button');
-    b.id='fvWebLogout';b.className='iconbtn';b.title='Cerrar sesión';b.textContent='↪';
+    b.id='fvWebLogout';b.className='iconbtn';b.title='Cerrar sesión';b.setAttribute('aria-label','Cerrar sesión');b.textContent='↪';
     b.onclick=function(){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}location.reload()};
     top.appendChild(b);
   }
@@ -124,4 +165,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", productionLoader + logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built -> stable Light Performance v3");
+console.log("FitValen Web V1 built -> Clean Foundation v1");
