@@ -1,0 +1,456 @@
+/* FitValen Web · Clean Foundation v1
+   Única capa visual web. No mueve DOM, no sustituye iconos y no altera lógica. */
+
+html.fv-web{
+  --bg:#f5f7f6;
+  --panel:#ffffff;
+  --panel2:#ffffff;
+  --text:#121816;
+  --muted:#7b8580;
+  --soft:#4f5b55;
+  --accent:#72e39a;
+  --accent2:#23814b;
+  --danger:#b94b47;
+  --warning:#946c22;
+  --line:rgba(18,32,25,.10);
+  --shadow:0 1px 2px rgba(18,32,25,.025),0 8px 22px rgba(18,32,25,.045);
+  --fv-surface-soft:#f0f3f1;
+  --fv-surface-hover:#eaefec;
+  --fv-green-soft:#e8f7ed;
+  --fv-radius-sm:12px;
+  --fv-radius-md:16px;
+  --fv-radius-lg:20px;
+}
+
+html.fv-web,html.fv-web body{
+  margin:0;
+  min-height:100%;
+  background:#f5f7f6!important;
+  color:var(--text)!important;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+html.fv-web body{
+  padding-bottom:calc(78px + var(--safe))!important;
+  background:#f5f7f6!important;
+  letter-spacing:-.002em;
+}
+html.fv-web *{box-sizing:border-box}
+html.fv-web button,html.fv-web input,html.fv-web select,html.fv-web textarea{font-family:inherit}
+html.fv-web button{touch-action:manipulation}
+html.fv-web button:focus-visible,html.fv-web input:focus-visible,html.fv-web select:focus-visible,html.fv-web textarea:focus-visible{
+  outline:3px solid rgba(52,174,96,.20)!important;
+  outline-offset:2px!important;
+}
+
+/* ---------- App shell ---------- */
+html.fv-web .app{
+  width:100%;
+  max-width:760px!important;
+  margin:0 auto!important;
+  padding:0 18px 30px!important;
+}
+html.fv-web .topbar{
+  position:sticky!important;
+  top:0!important;
+  z-index:40!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  min-height:64px!important;
+  margin:0 -18px 10px!important;
+  padding:11px 18px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(18,32,25,.07)!important;
+  border-radius:0!important;
+  overflow:visible!important;
+  background:rgba(245,247,246,.96)!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+}
+html.fv-web .brandrow{display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important;padding:0!important}
+html.fv-web .topbar .logo{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 38px!important;
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  border:1px solid var(--line)!important;
+  border-radius:11px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:none!important;
+}
+html.fv-web .fvHeaderLogoImg{display:block!important;width:100%!important;height:100%!important;object-fit:cover!important}
+html.fv-web .brand{font-size:17px!important;font-weight:720!important;line-height:1.1!important;letter-spacing:-.02em!important;color:var(--text)!important}
+html.fv-web .status{max-width:190px!important;margin-top:3px!important;font-size:10.5px!important;line-height:1.2!important;font-weight:500!important;color:var(--muted)!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html.fv-web .topactions{display:flex!important;align-items:center!important;gap:7px!important;flex:0 0 auto!important}
+html.fv-web .iconbtn,html.fv-web .topactions .iconbtn{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 38px!important;
+  width:38px!important;
+  height:38px!important;
+  min-width:38px!important;
+  padding:0!important;
+  border:1px solid var(--line)!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#59655f!important;
+  box-shadow:none!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+html.fv-web .topactions .beta{display:none!important}
+
+/* Navegación estable: misma geometría en móvil y escritorio. */
+html.fv-web .nav{
+  position:fixed!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  z-index:60!important;
+  width:auto!important;
+  transform:none!important;
+  padding:6px 8px calc(6px + var(--safe))!important;
+  border:0!important;
+  border-top:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:rgba(255,255,255,.98)!important;
+  box-shadow:0 -8px 24px rgba(22,37,29,.045)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+}
+html.fv-web .navin{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:2px!important;
+  width:100%!important;
+  max-width:760px!important;
+  margin:0 auto!important;
+  padding:0!important;
+}
+html.fv-web .nav button{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  min-height:58px!important;
+  padding:5px 4px!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:transparent!important;
+  color:#818b86!important;
+  font-size:10px!important;
+  font-weight:620!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+html.fv-web .nav button span{
+  display:block!important;
+  height:24px!important;
+  margin:0 0 2px!important;
+  font-size:20px!important;
+  line-height:24px!important;
+}
+html.fv-web .nav button.on{background:var(--fv-green-soft)!important;color:var(--accent2)!important}
+html.fv-web .nav button.on:before{display:none!important}
+html.fv-web .nav button svg{width:20px!important;height:20px!important;display:block!important}
+
+/* ---------- Shared geometry ---------- */
+html.fv-web .screen{padding:0 0 4px!important}
+html.fv-web .screen.on{animation:none!important}
+html.fv-web .row{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+html.fv-web .row>*{min-width:0}
+html.fv-web .grid2{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}
+html.fv-web .grid3{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+html.fv-web .hero,html.fv-web .card,html.fv-web .mealcard,html.fv-web .exerciseCard,html.fv-web .chartcard,
+html.fv-web .fvStartCard,html.fv-web .fvFocusCard,html.fv-web .fvTrendHero,html.fv-web .fvPeriod{
+  border:1px solid var(--line)!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:none!important;
+}
+html.fv-web .hero{padding:18px!important;margin-bottom:10px!important;border-radius:var(--fv-radius-lg)!important;overflow:hidden!important}
+html.fv-web .hero:after{background:rgba(114,227,154,.12)!important}
+html.fv-web .card{padding:15px!important;margin-bottom:9px!important;border-radius:var(--fv-radius-md)!important}
+html.fv-web .sectionhead{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:12px!important;margin:24px 2px 9px!important;min-width:0!important}
+html.fv-web .sectiontitle{min-width:0!important;font-size:16px!important;font-weight:690!important;line-height:1.2!important;letter-spacing:-.015em!important;text-transform:none!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web .sectionmeta{flex:0 1 auto!important;max-width:45%!important;font-size:10.5px!important;line-height:1.3!important;font-weight:500!important;color:var(--muted)!important;text-align:right!important;overflow-wrap:anywhere}
+html.fv-web .ey{font-size:10.5px!important;font-weight:620!important;line-height:1.25!important;letter-spacing:.01em!important;text-transform:none!important;color:var(--muted)!important}
+html.fv-web .big{font-size:40px!important;line-height:1!important;font-weight:720!important;letter-spacing:-.045em!important;color:var(--text)!important}
+html.fv-web .unit{font-size:13px!important;font-weight:550!important;color:var(--muted)!important}
+html.fv-web .small{font-size:11.5px!important;line-height:1.45!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web .stat{font-size:21px!important;font-weight:700!important;line-height:1.08!important;color:var(--text)!important}
+html.fv-web .pill{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 auto!important;
+  min-height:26px!important;
+  max-width:100%!important;
+  padding:4px 8px!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:var(--fv-surface-soft)!important;
+  color:#616d67!important;
+  font-size:10px!important;
+  font-weight:620!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+}
+html.fv-web .pill.good{background:var(--fv-green-soft)!important;color:var(--accent2)!important}
+html.fv-web .pill.warn,html.fv-web .pill.above{background:#fff3d8!important;color:var(--warning)!important}
+html.fv-web .metric{min-width:0!important;padding:12px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:#fff!important}
+html.fv-web .metric .small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+
+/* ---------- Buttons / fields ---------- */
+html.fv-web .actionbtn,html.fv-web .fvToolBtn,html.fv-web .fvMenuBtn,html.fv-web .optionbtn,
+html.fv-web .fvProduct,html.fv-web .fvMiniBtn,html.fv-web .fvPrimary,html.fv-web .daychip,
+html.fv-web .fvNav button,html.fv-web .fvTimers button,html.fv-web .fvLastTools button{
+  min-width:0!important;
+  border:1px solid var(--line)!important;
+  border-radius:var(--fv-radius-sm)!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:none!important;
+  font-weight:640!important;
+  line-height:1.2!important;
+  overflow-wrap:anywhere!important;
+}
+html.fv-web .actionbtn,html.fv-web .fvToolBtn,html.fv-web .fvMenuBtn,html.fv-web .optionbtn,html.fv-web .fvProduct,html.fv-web .fvPrimary{min-height:46px!important}
+html.fv-web .actionbtn.primary,html.fv-web .fvToolBtn.primary,html.fv-web .fvPrimary,html.fv-web #fvFinishDayBtn{
+  background:var(--accent)!important;
+  border-color:var(--accent)!important;
+  color:#0b321a!important;
+}
+html.fv-web .actionbtn.danger,html.fv-web .fvToolBtn.danger,html.fv-web .fvMenuBtn.danger,html.fv-web .fvMiniBtn.danger{
+  background:#fff4f3!important;border-color:#efd3d1!important;color:var(--danger)!important;
+}
+html.fv-web .actionbtn:disabled,html.fv-web .fvToolBtn:disabled,html.fv-web .daychip:disabled{opacity:.48!important;cursor:default!important}
+html.fv-web .input,html.fv-web .fvText,html.fv-web .fvSelect,html.fv-web .fvArea,html.fv-web .fvSetInput{
+  width:100%!important;
+  max-width:100%!important;
+  border:1px solid rgba(18,32,25,.14)!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+html.fv-web .input,html.fv-web .fvText,html.fv-web .fvSelect{height:50px!important}
+html.fv-web .input{font-size:18px!important;font-weight:650!important}
+html.fv-web .fvText,html.fv-web .fvSelect{font-size:15px!important}
+html.fv-web .fvArea{min-height:88px!important;resize:vertical!important}
+html.fv-web .input:focus,html.fv-web .fvText:focus,html.fv-web .fvSelect:focus,html.fv-web .fvArea:focus,html.fv-web .fvSetInput:focus{
+  border-color:#63cf89!important;
+  box-shadow:0 0 0 3px rgba(52,174,96,.11)!important;
+}
+html.fv-web .fvField{margin-top:12px!important}
+html.fv-web .fvField label{display:block!important;margin:0 2px 6px!important;font-size:9.5px!important;line-height:1.2!important;font-weight:620!important;letter-spacing:.015em!important;text-transform:none!important;color:var(--muted)!important}
+
+/* ---------- Inicio ---------- */
+html.fv-web #home .hero .row{align-items:flex-start!important}
+html.fv-web #home .hero .big{font-size:44px!important}
+html.fv-web #home .actionRow{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:12px!important}
+html.fv-web #home .timeline{padding:2px 0!important}
+html.fv-web #home .timelineRow{
+  display:grid!important;
+  grid-template-columns:38px minmax(0,1fr) auto!important;
+  gap:10px!important;
+  align-items:center!important;
+  min-width:0!important;
+  padding:12px 0!important;
+  border-bottom:1px solid var(--line)!important;
+}
+html.fv-web #home .timelineRow:last-child{border-bottom:0!important}
+html.fv-web #home .timelineIcon{display:flex!important;align-items:center!important;justify-content:center!important;width:36px!important;height:36px!important;border-radius:11px!important;background:var(--fv-surface-soft)!important;color:#59665f!important;font-size:17px!important}
+html.fv-web #home .timelineTitle{font-size:13px!important;font-weight:650!important;line-height:1.25!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web #home .timelineMeta{margin-top:3px!important;font-size:10.5px!important;line-height:1.35!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #home .brain{background:#f2faf5!important;border-color:rgba(35,129,75,.11)!important}
+html.fv-web #home .braintext{font-size:13px!important;font-weight:540!important;line-height:1.5!important;color:#3d5147!important;overflow-wrap:anywhere}
+html.fv-web .fvInlineTools{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:10px 0 14px!important}
+html.fv-web .fvInlineTools.three{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html.fv-web .fvInlineTools.three .fvToolBtn:last-child{grid-column:1/-1!important}
+html.fv-web #fvGoalsCard{margin:10px 0!important;border-radius:16px!important;background:#fff!important}
+html.fv-web #fvGoalsCard:after{display:none!important}
+html.fv-web #fvGoalsCard .fvGoalRange{margin-top:4px!important;font-size:20px!important;font-weight:700!important;line-height:1.1!important;color:var(--text)!important}
+html.fv-web #fvGoalsCard .fvGoalRange span{font-size:11px!important;font-weight:550!important;color:var(--muted)!important}
+html.fv-web #fvGoalsCard .fvGoalTrack{position:relative!important;height:7px!important;margin-top:12px!important;border-radius:999px!important;background:#e8ece9!important;overflow:hidden!important}
+html.fv-web #fvGoalsCard .fvGoalBand{background:rgba(114,227,154,.22)!important}
+html.fv-web #fvGoalsCard .fvGoalTrack i{background:var(--accent)!important}
+html.fv-web #fvGoalsCard .fvGoalScale{height:17px!important;margin-top:5px!important;font-size:9px!important;color:var(--muted)!important}
+html.fv-web #fvGoalsCard .fvGoalFooter{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-top:7px!important;padding-top:9px!important;border-top:1px solid var(--line)!important;font-size:10.5px!important;color:var(--muted)!important}
+html.fv-web #fvGoalsCard .fvGoalFooter b{font-size:11px!important;color:var(--soft)!important}
+
+/* ---------- Dieta ---------- */
+html.fv-web #diet .mealgrid{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+html.fv-web #diet .mealcard{
+  display:block!important;
+  min-width:0!important;
+  min-height:0!important;
+  padding:14px!important;
+  border-radius:15px!important;
+  text-align:left!important;
+}
+html.fv-web #diet .mealcard>.row{display:flex!important;align-items:center!important;gap:10px!important}
+html.fv-web #diet .mealicon{font-size:21px!important;line-height:1!important;flex:0 0 auto!important}
+html.fv-web #diet .mealname{margin-top:9px!important;font-size:14px!important;font-weight:660!important;line-height:1.25!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web #diet .mealmeta{margin-top:4px!important;font-size:10.5px!important;line-height:1.35!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #diet .mealKcal{margin-top:7px!important;font-size:11px!important;font-weight:650!important;color:var(--accent2)!important}
+html.fv-web #diet .foodrow{padding:12px 0!important;border-bottom:1px solid var(--line)!important}
+html.fv-web #diet .foodrow .row{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important}
+html.fv-web #diet .foodname{font-size:13.5px!important;font-weight:650!important;line-height:1.3!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web #diet .foodmeta{margin-top:4px!important;font-size:10.5px!important;line-height:1.35!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #diet .quickMealsWrap{margin-top:18px!important}
+html.fv-web #diet .quickMealsHead{display:flex!important;align-items:flex-end!important;justify-content:space-between!important;gap:10px!important;margin:0 2px 9px!important}
+html.fv-web #diet .quickMealsGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+html.fv-web #diet .quickMealBtn{display:flex!important;flex-direction:column!important;justify-content:space-between!important;min-width:0!important;min-height:98px!important;padding:12px!important;border:1px solid var(--line)!important;border-radius:15px!important;background:#fff!important;color:var(--text)!important;text-align:left!important;box-shadow:none!important}
+html.fv-web #diet .quickMealTop{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;min-width:0!important}
+html.fv-web #diet .quickMealIcon{font-size:19px!important;line-height:1!important}
+html.fv-web #diet .quickMealKcal{flex:0 0 auto!important;font-size:9.5px!important;font-weight:650!important;color:var(--accent2)!important;white-space:nowrap!important}
+html.fv-web #diet .quickMealName{margin-top:9px!important;font-size:13px!important;font-weight:660!important;line-height:1.2!important;overflow-wrap:anywhere}
+html.fv-web #diet .quickMealDesc{margin-top:4px!important;font-size:9.5px!important;line-height:1.3!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #diet .fvFoodActions{display:flex!important;gap:5px!important;flex:0 0 auto!important}
+html.fv-web #diet .fvMiniBtn{min-width:34px!important;width:34px!important;height:34px!important;padding:0!important}
+
+/* ---------- Entrenamiento ---------- */
+html.fv-web #work .daychips{
+  position:relative!important;
+  top:auto!important;
+  z-index:1!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:6px!important;
+  margin:0 0 12px!important;
+  padding:5px!important;
+  overflow:visible!important;
+  background:#fff!important;
+  border:1px solid var(--line)!important;
+  border-radius:14px!important;
+}
+html.fv-web #work .daychip{min-width:0!important;min-height:39px!important;padding:4px!important;background:transparent!important;color:#66716b!important;font-size:12px!important;font-weight:650!important}
+html.fv-web #work .daychip.on{background:var(--fv-green-soft)!important;border-color:transparent!important;color:var(--accent2)!important}
+html.fv-web #work .workSummary{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+html.fv-web #work .workStat{min-width:0!important;padding:11px 7px!important;border:1px solid var(--line)!important;border-radius:13px!important;background:#fff!important;text-align:center!important}
+html.fv-web #work .workStat b{display:block!important;font-size:17px!important;font-weight:690!important;line-height:1.1!important;color:var(--text)!important}
+html.fv-web #work .workStat span{display:block!important;margin-top:4px!important;font-size:8.5px!important;line-height:1.2!important;letter-spacing:0!important;text-transform:none!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #work .exerciseCard{min-width:0!important;padding:14px!important;margin-bottom:8px!important;border-radius:15px!important}
+html.fv-web #work .exHead{display:flex!important;align-items:flex-start!important;gap:9px!important;min-width:0!important}
+html.fv-web #work .excode{flex:0 0 auto!important;min-width:38px!important;height:29px!important;border:0!important;border-radius:9px!important;background:var(--fv-green-soft)!important;color:var(--accent2)!important;font-size:10px!important;font-weight:680!important}
+html.fv-web #work .exname{min-width:0!important;flex:1!important;font-size:13.5px!important;font-weight:660!important;line-height:1.3!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web #work .expresc{margin-top:7px!important;font-size:10.5px!important;line-height:1.4!important;color:var(--soft)!important;overflow-wrap:anywhere}
+html.fv-web #work .exlast{margin-top:6px!important;padding-top:7px!important;border-top:1px solid var(--line)!important;font-size:10.5px!important;line-height:1.4!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #work .activebanner{padding:12px!important;border:1px solid rgba(35,129,75,.12)!important;border-radius:14px!important;background:var(--fv-green-soft)!important;color:#285d3d!important}
+html.fv-web #work .fvStartCard,html.fv-web #work .fvFocusCard{min-width:0!important;padding:16px!important;border-radius:17px!important}
+html.fv-web #work .fvFocusHeader{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;align-items:start!important}
+html.fv-web #work .fvFocusTitle{min-width:0!important;margin-top:5px!important;font-size:21px!important;font-weight:700!important;line-height:1.18!important;letter-spacing:-.02em!important;color:var(--text)!important;overflow-wrap:anywhere}
+html.fv-web #work .fvPrescription{margin-top:7px!important;font-size:12px!important;font-weight:570!important;line-height:1.35!important;color:var(--soft)!important;overflow-wrap:anywhere}
+html.fv-web #work .fvMore{flex:0 0 40px!important;width:40px!important;height:40px!important;border:1px solid var(--line)!important;border-radius:11px!important;background:#fff!important;color:#5d6962!important}
+html.fv-web #work .fvReference{margin-top:13px!important;padding:10px 12px!important;border:1px solid var(--line)!important;border-radius:13px!important;background:var(--fv-surface-soft)!important}
+html.fv-web #work .fvReferenceTop{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;min-width:0!important}
+html.fv-web #work .fvSuggested{flex:0 1 auto!important;max-width:45%!important;white-space:normal!important;text-align:right!important;overflow-wrap:anywhere!important}
+html.fv-web #work .fvReferenceText{font-size:10.5px!important;line-height:1.4!important;color:var(--soft)!important;overflow-wrap:anywhere}
+html.fv-web #work .fvSetsStrip{display:flex!important;flex-wrap:wrap!important;gap:6px!important}
+html.fv-web #work .fvSetChip{max-width:100%!important;min-height:34px!important;padding:6px 9px!important;border:1px solid var(--line)!important;border-radius:10px!important;background:#fff!important;color:var(--text)!important;overflow-wrap:anywhere!important}
+html.fv-web #work .fvEntry{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important;margin-top:13px!important}
+html.fv-web #work .fvSetInput{height:54px!important;font-size:17px!important;font-weight:650!important}
+html.fv-web #work .fvEntry .fvPrimary{height:54px!important;min-width:108px!important;padding:0 14px!important}
+html.fv-web #work .fvNav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:12px!important}
+html.fv-web #work .fvLastTools{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;margin-top:8px!important}
+html.fv-web #work .fvLastTools.fvFour{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html.fv-web #work .fvRest{margin-top:13px!important;padding:11px!important;border:1px solid var(--line)!important;border-radius:14px!important;background:var(--fv-surface-soft)!important}
+html.fv-web #work .fvTimers{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;margin-top:8px!important}
+
+/* ---------- Progreso ---------- */
+html.fv-web #progress .fvAdvancedProgress{min-width:0!important}
+html.fv-web #progress .fvTrendHero{padding:16px!important;border-radius:17px!important;background:#fff!important}
+html.fv-web #progress .fvTrendHero .fvValue{margin-top:5px!important;font-size:30px!important;font-weight:720!important;line-height:1!important;color:var(--text)!important}
+html.fv-web #progress .chartBox{height:132px!important;margin-top:13px!important;min-width:0!important}
+html.fv-web #progress .chartGrid{stroke:rgba(18,32,25,.08)!important}
+html.fv-web #progress .chartLine{stroke:var(--accent2)!important}
+html.fv-web #progress .fvPeriodGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+html.fv-web #progress .fvPeriod{min-width:0!important;padding:11px 7px!important;border-radius:13px!important;text-align:center!important}
+html.fv-web #progress .fvPeriod b{display:block!important;font-size:14px!important;font-weight:690!important;line-height:1.15!important;overflow-wrap:anywhere}
+html.fv-web #progress .fvPeriod span{display:block!important;margin-top:4px!important;font-size:8.5px!important;line-height:1.25!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #progress .fvWorkoutRow{display:grid!important;grid-template-columns:40px minmax(0,1fr) auto!important;gap:9px!important;align-items:center!important;min-width:0!important;padding:10px 0!important;border-bottom:1px solid var(--line)!important}
+html.fv-web #progress .fvWorkoutDay{display:flex!important;align-items:center!important;justify-content:center!important;width:38px!important;height:38px!important;border-radius:11px!important;background:var(--fv-green-soft)!important;color:var(--accent2)!important;font-size:10px!important;font-weight:680!important}
+html.fv-web #progress .fvWorkoutRow b{font-size:11.5px!important;line-height:1.25!important;overflow-wrap:anywhere}
+html.fv-web #progress .fvWorkoutRow small{display:block!important;margin-top:3px!important;font-size:9px!important;line-height:1.3!important;color:var(--muted)!important;overflow-wrap:anywhere}
+html.fv-web #progress .fvWorkoutRow>span{max-width:110px!important;font-size:9.5px!important;line-height:1.3!important;color:var(--soft)!important;text-align:right!important;overflow-wrap:anywhere!important}
+
+/* ---------- Sheets ---------- */
+html.fv-web .overlay{background:rgba(20,28,24,.42)!important;align-items:flex-end!important}
+html.fv-web .sheet{
+  width:100%!important;
+  max-width:760px!important;
+  max-height:88vh!important;
+  margin:0 auto!important;
+  padding:12px 16px calc(20px + var(--safe))!important;
+  border:1px solid var(--line)!important;
+  border-bottom:0!important;
+  border-radius:22px 22px 0 0!important;
+  background:#fff!important;
+  color:var(--text)!important;
+  box-shadow:0 -16px 44px rgba(20,34,27,.13)!important;
+  overflow:auto!important;
+}
+html.fv-web .grab{width:38px!important;height:4px!important;margin:2px auto 14px!important;border-radius:999px!important;background:#d8deda!important}
+html.fv-web .optionbtn{width:100%!important;min-height:52px!important;padding:11px 12px!important;margin-bottom:7px!important;text-align:left!important}
+html.fv-web .selection{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:10px!important;align-items:center!important;padding:11px 0!important;border-bottom:1px solid var(--line)!important;min-width:0!important}
+html.fv-web .fvChoiceRow{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+html.fv-web .fvProduct{width:100%!important;text-align:left!important;padding:10px 11px!important;margin-bottom:7px!important}
+html.fv-web .fvProduct b,html.fv-web .fvProduct span{overflow-wrap:anywhere!important}
+html.fv-web .toast{bottom:calc(88px + var(--safe))!important;background:#18201c!important;color:#fff!important;border-radius:11px!important;padding:10px 13px!important;font-size:11px!important;font-weight:620!important;box-shadow:0 10px 28px rgba(20,34,27,.15)!important}
+html.fv-web .skeleton{border:0!important;background:linear-gradient(90deg,#edf1ef 25%,#f8faf9 50%,#edf1ef 75%)!important;background-size:200% 100%!important;box-shadow:none!important}
+
+/* ---------- Login ---------- */
+html.fv-web.fv-web-logged-out body{padding-bottom:0!important}
+html.fv-web.fv-web-logged-out .app{max-width:430px!important;padding:7vh 18px 36px!important}
+html.fv-web.fv-web-logged-out .topbar{position:relative!important;top:auto!important;justify-content:center!important;margin:0!important;padding:0 0 22px!important;border:0!important;background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+html.fv-web.fv-web-logged-out .topbar .status,html.fv-web.fv-web-logged-out .topactions{display:none!important}
+html.fv-web.fv-web-logged-out #home .hero{padding:5px 0 16px!important;border:0!important;background:transparent!important;text-align:center!important}
+html.fv-web.fv-web-logged-out #home .hero:after{display:none!important}
+html.fv-web.fv-web-logged-out #home .hero .big{font-size:29px!important}
+html.fv-web.fv-web-logged-out #home>.card{padding:18px!important;border-radius:17px!important;box-shadow:var(--shadow)!important}
+
+/* ---------- Responsive safety ---------- */
+@media(max-width:520px){
+  html.fv-web .app{padding-left:14px!important;padding-right:14px!important}
+  html.fv-web .topbar{margin-left:-14px!important;margin-right:-14px!important;padding-left:14px!important;padding-right:14px!important}
+  html.fv-web .big{font-size:36px!important}
+  html.fv-web .grid2{grid-template-columns:1fr!important}
+  html.fv-web #diet .quickMealsGrid{grid-template-columns:1fr!important}
+  html.fv-web #work .fvEntry{grid-template-columns:1fr!important}
+  html.fv-web #work .fvEntry .fvPrimary{width:100%!important;min-width:0!important}
+  html.fv-web #progress .fvWorkoutRow{grid-template-columns:38px minmax(0,1fr)!important}
+  html.fv-web #progress .fvWorkoutRow>span{grid-column:2!important;max-width:none!important;text-align:left!important;margin-top:-3px!important}
+  html.fv-web .fvChoiceRow{grid-template-columns:1fr!important}
+}
+@media(max-width:360px){
+  html.fv-web .app{padding-left:11px!important;padding-right:11px!important}
+  html.fv-web .topbar{margin-left:-11px!important;margin-right:-11px!important;padding-left:11px!important;padding-right:11px!important}
+  html.fv-web .status{max-width:132px!important}
+  html.fv-web .nav button{font-size:9.5px!important}
+  html.fv-web .nav button span{font-size:19px!important}
+  html.fv-web .grid3{gap:5px!important}
+  html.fv-web #work .daychips{gap:4px!important;padding:4px!important}
+  html.fv-web #work .daychip{font-size:11px!important}
+}
+@media(min-width:900px){
+  html.fv-web .app{max-width:800px!important;padding-left:24px!important;padding-right:24px!important}
+  html.fv-web .topbar{margin-left:-24px!important;margin-right:-24px!important;padding-left:24px!important;padding-right:24px!important}
+  html.fv-web .navin{max-width:800px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  html.fv-web *,html.fv-web *:before,html.fv-web *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
