@@ -1,0 +1,96 @@
+/* FitValen Web · Final QA v1
+   Se concatena a fv-web-foundation-v1.css durante el build.
+   Objetivo: seguridad responsive, Safari/iOS y consistencia de interacción.
+   No mueve DOM, no sustituye iconos y no contiene lógica de negocio. */
+
+html.fv-web{
+  color-scheme:light;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+html.fv-web body{overflow-x:hidden!important}
+html.fv-web .app,
+html.fv-web .screen,
+html.fv-web #home,
+html.fv-web #diet,
+html.fv-web #work,
+html.fv-web #progress{min-width:0!important;max-width:100%!important}
+html.fv-web img,html.fv-web svg{max-width:100%}
+html.fv-web .big,html.fv-web .stat,html.fv-web .fvValue,html.fv-web .fvGoalRange,
+html.fv-web .fvTimerDisplay,html.fv-web .workStat b,html.fv-web .fvPeriod b{
+  font-variant-numeric:tabular-nums lining-nums;
+}
+
+/* iOS Safari no debe hacer zoom al enfocar campos. */
+html.fv-web .fvText,html.fv-web .fvSelect,html.fv-web .fvArea{font-size:16px!important}
+
+/* Targets táctiles y controles consistentes. */
+html.fv-web #work .daychip{min-height:44px!important}
+html.fv-web #work .fvNav button,
+html.fv-web #work .fvLastTools button,
+html.fv-web #work .fvTimers button{min-height:44px!important}
+html.fv-web #diet .fvMiniBtn{width:38px!important;height:38px!important;min-width:38px!important}
+
+/* Contención: ninguna columna dinámica debe empujar el viewport. */
+html.fv-web .sectionhead>*,
+html.fv-web .actionRow>*,
+html.fv-web .fvInlineTools>*,
+html.fv-web .workSummary>*,
+html.fv-web .fvPeriodGrid>*,
+html.fv-web .fvChoiceRow>*,
+html.fv-web #progress .fvWorkoutRow>*{min-width:0!important}
+html.fv-web #progress .chartBox svg{display:block!important;width:100%!important;height:100%!important}
+
+/* Bottom sheets: altura real del viewport y scroll estable con teclado móvil. */
+html.fv-web .overlay{overscroll-behavior:contain!important}
+html.fv-web .sheet{
+  max-height:min(88vh,calc(100dvh - 8px))!important;
+  overscroll-behavior:contain!important;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Evita que estados largos compitan con el dato principal en cabeceras. */
+@media(max-width:520px){
+  html.fv-web #home .hero>.row>.pill,
+  html.fv-web #diet .hero>.row>.pill,
+  html.fv-web #work .hero>.row>.pill{
+    flex:0 1 auto!important;
+    max-width:46%!important;
+    white-space:normal!important;
+    text-align:center!important;
+  }
+
+  /* 375–430 px admiten dos columnas sin comprometer legibilidad. */
+  html.fv-web .grid2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html.fv-web #diet .quickMealsGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:390px){
+  html.fv-web .grid2{grid-template-columns:1fr!important}
+  html.fv-web .sectionhead{align-items:flex-start!important}
+  html.fv-web .sectionmeta{max-width:48%!important}
+  html.fv-web #progress .fvPeriod b{font-size:13px!important}
+}
+
+@media(max-width:340px){
+  html.fv-web #diet .quickMealsGrid{grid-template-columns:1fr!important}
+  html.fv-web #home .actionRow,
+  html.fv-web .fvInlineTools,
+  html.fv-web .fvInlineTools.three{grid-template-columns:1fr!important}
+  html.fv-web .fvInlineTools.three .fvToolBtn:last-child{grid-column:auto!important}
+  html.fv-web .metric{padding:9px!important}
+  html.fv-web .metric .stat{font-size:18px!important}
+}
+
+@media(hover:hover) and (pointer:fine){
+  html.fv-web .actionbtn:not(:disabled):hover,
+  html.fv-web .fvToolBtn:not(:disabled):hover,
+  html.fv-web .fvMenuBtn:not(:disabled):hover,
+  html.fv-web .optionbtn:not(:disabled):hover,
+  html.fv-web .fvProduct:not(:disabled):hover,
+  html.fv-web .iconbtn:not(:disabled):hover{background:var(--fv-surface-hover)!important}
+  html.fv-web .actionbtn.primary:not(:disabled):hover,
+  html.fv-web .fvToolBtn.primary:not(:disabled):hover,
+  html.fv-web .fvPrimary:not(:disabled):hover,
+  html.fv-web #fvFinishDayBtn:not(:disabled):hover{background:#67da91!important;border-color:#67da91!important}
+}
