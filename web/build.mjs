@@ -28,7 +28,43 @@ guards = guards.replace(
 if (guards === guardsBefore) {
   throw new Error("FitValen Web build guard: patchChrome signature changed");
 }
+
+/*
+ * advanced-guards used to intercept progress_v2 fetches and mutate the same
+ * progress DOM several times after the main renderer had already painted it.
+ * On Web, advanced-v1 is the single owner of the Progress view. Keep the
+ * non-progress guards (manual food / finish confirmations) but remove the
+ * secondary progress fetch wrapper and initial visual patch.
+ */
+const guardsFetchBefore = guards;
+guards = guards.replace(
+  /\n  if\(nativeFetch\)\{window\.fetch=function\(\)\{[^\n]*\}\}\n/,
+  "\n"
+);
+if (guards === guardsFetchBefore) {
+  throw new Error("FitValen Web build guard: progress fetch interceptor signature changed");
+}
+const guardsObserveBefore = guards;
+guards = guards.replace(
+  "function observe(){augmentProductSheet();patchChrome();patchProgress();",
+  "function observe(){augmentProductSheet();patchChrome();"
+);
+if (guards === guardsObserveBefore) {
+  throw new Error("FitValen Web build guard: progress observer signature changed");
+}
 await writeFile(guardsPath, guards, "utf8");
+
+const advancedPath = resolve(out, "advanced-v1.js");
+let advanced = await readFile(advancedPath, "utf8");
+const advancedBefore = advanced;
+advanced = advanced.replace(
+  "if(tab==='progress')setTimeout(function(){loadProgress(false)},150)",
+  "if(tab==='progress')loadProgress(false)"
+);
+if (advanced === advancedBefore) {
+  throw new Error("FitValen Web build guard: progress nav binding signature changed");
+}
+await writeFile(advancedPath, advanced, "utf8");
 
 const enhancePath = resolve(out, "enhance-v2.js");
 let enhance = await readFile(enhancePath, "utf8");
@@ -57,6 +93,29 @@ await writeFile(autoDayPath, autoDay, "utf8");
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
 
+/*
+ * Base Mini App also owns a legacy Progress renderer. Running it together with
+ * advanced-v1 caused a first render followed by a second full innerHTML render,
+ * perceived as a page refresh. Disable the legacy Progress render on Web.
+ */
+const progressOwnerBefore = html;
+html = html.replace(
+  "if(name==='progress'){load('progress','progress',renderProgress,false)}",
+  "if(name==='progress'){/* Web: advanced-v1 is the only Progress renderer. */}"
+);
+if (html === progressOwnerBefore) {
+  throw new Error("FitValen Web build guard: base progress renderer signature changed");
+}
+
+const refreshBefore = html;
+html = html.replace(
+  "refresh.onclick=function(){var key=currentTab,action=key==='work'?'workouts':key,renderer=key==='home'?renderHome:key==='diet'?renderDiet:key==='work'?renderWork:renderProgress;showSkeleton(key);load(action,key,renderer,true);haptic()};",
+  "refresh.onclick=function(){var key=currentTab;if(key==='progress'){var pb=document.querySelector('.nav button[data-tab=\"progress\"]');if(pb){pb.click()}haptic();return}var action=key==='work'?'workouts':key,renderer=key==='home'?renderHome:key==='diet'?renderDiet:renderWork;showSkeleton(key);load(action,key,renderer,true);haptic()};"
+);
+if (html === refreshBefore) {
+  throw new Error("FitValen Web build guard: refresh handler signature changed");
+}
+
 const gateStyle = `<style data-fv-web-login-gate="1">html.fv-web-logged-out .nav{display:none!important}html.fv-web-logged-out body{padding-bottom:0!important}</style>`;
 
 /*
@@ -70,7 +129,7 @@ const productionCss = [
   "advanced-v1.css",
   "exercise-note-v1.css",
   "fv-web-foundation-v1.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=10">'}).join("");
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=11">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -133,7 +192,7 @@ const productionLoader = `<script data-fv-web-production-loader="1">(function(){
       (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
       return;
     }
-    var s=document.createElement('script');s.src='/'+file+'?web=10';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+    var s=document.createElement('script');s.src='/'+file+'?web=11';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
   }
   next();
 })();</script>`;
@@ -165,4 +224,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", productionLoader + logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built -> Clean Foundation v1");
+console.log("FitValen Web V1 built -> Clean Foundation v1 + stable Progress");
