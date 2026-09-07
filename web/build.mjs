@@ -16,6 +16,7 @@ let html = await readFile(indexPath, "utf8");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
+  var WEB_DAY='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-day';
   var nativeFetch=window.fetch.bind(window);
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
   function isMiniAppCall(input,init){
@@ -26,6 +27,7 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
     if(typeof Headers!=='undefined'&&h instanceof Headers){return h.has('x-telegram-init-data')}
     return Object.prototype.hasOwnProperty.call(h,'x-telegram-init-data')||Object.prototype.hasOwnProperty.call(h,'X-Telegram-Init-Data');
   }
+  function actionFromBody(body){try{var j=JSON.parse(String(body||'{}'));return String(j&&j.action||'')}catch(e){return ''}}
   window.fetch=function(input,init){
     if(!isMiniAppCall(input,init)){return nativeFetch(input,init)}
     var t=token();
@@ -34,7 +36,8 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
     h.delete('x-telegram-init-data');
     h.set('authorization','Bearer '+t);
     h.set('content-type','application/json');
-    return nativeFetch(WEB_API,{method:'POST',headers:h,body:init.body}).then(function(r){
+    var endpoint=actionFromBody(init.body)==='start_day'?WEB_DAY:WEB_API;
+    return nativeFetch(endpoint,{method:'POST',headers:h,body:init.body}).then(function(r){
       if(r.status===401){try{localStorage.removeItem('fitvalen_web_session');localStorage.removeItem('fitvalen_web_session_expires')}catch(e){}setTimeout(function(){location.reload()},30)}
       return r;
     });
@@ -64,4 +67,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated read-only backend)");
+console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated backend + automatic day start)");
