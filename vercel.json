@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "echo 'No install required for FitValen Web V1'",
+  "buildCommand": "node web/build.mjs",
+  "outputDirectory": "web/dist",
+  "cleanUrls": true
+}
