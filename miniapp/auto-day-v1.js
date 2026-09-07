@@ -55,9 +55,9 @@
     var fill=document.getElementById('fvGoalFill');
     if(fill){fill.style.width=pct.toFixed(1)+'%'}
     var badge=document.getElementById('fvGoalState');
-    if(badge){badge.textContent=state.text;badge.className=state.className}
-    var footer=card.querySelector('.fvGoalFooter b');
-    if(footer){footer.textContent=WATER_LITERS+' L de agua'}
+    if(badge){if(String(badge.textContent||'')!==state.text){badge.textContent=state.text}if(badge.className!==state.className){badge.className=state.className}}
+    var footer=card.querySelector('.fvGoalFooter b'),waterText=WATER_LITERS+' L de agua';
+    if(footer&&String(footer.textContent||'')!==waterText){footer.textContent=waterText}
   }
   function sync(){removeManualEnd();autoStart();syncGoals()}
   function install(){
