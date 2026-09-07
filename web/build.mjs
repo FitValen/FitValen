@@ -32,7 +32,14 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
     if(typeof Headers!=='undefined'&&h instanceof Headers){return h.has('x-telegram-init-data')}
     return Object.prototype.hasOwnProperty.call(h,'x-telegram-init-data')||Object.prototype.hasOwnProperty.call(h,'X-Telegram-Init-Data');
   }
-  function actionFromBody(body){try{var j=JSON.parse(String(body||'{}'));return String(j&&j.action||'')}catch(e){return ''}}
+  function actionFromBody(body){
+    var raw='';
+    try{raw=typeof body==='string'?body:String(body||'')}catch(e){raw=''}
+    try{var j=JSON.parse(raw);if(j&&j.action){return String(j.action)}}catch(e){}
+    if(raw.indexOf('set_weight')>=0){return 'set_weight'}
+    if(raw.indexOf('start_day')>=0){return 'start_day'}
+    return '';
+  }
   window.fetch=function(input,init){
     if(!isMiniAppCall(input,init)){return nativeFetch(input,init)}
     var t=token();
@@ -74,4 +81,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from miniapp source -> web/dist (automatic day + secure weight writes)");
+console.log("FitValen Web V1 built from miniapp source -> web/dist (robust automatic day + secure weight writes)");
