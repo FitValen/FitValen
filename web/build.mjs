@@ -14,11 +14,15 @@ await cp(source, out, { recursive: true });
 const indexPath = resolve(out, "index.html");
 let html = await readFile(indexPath, "utf8");
 
+const gateStyle = `<style data-fv-web-login-gate="1">html.fv-web-logged-out .nav{display:none!important}html.fv-web-logged-out body{padding-bottom:0!important}</style>`;
+
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
   var WEB_DAY='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-day';
   var nativeFetch=window.fetch.bind(window);
   function token(){try{return localStorage.getItem('fitvalen_web_session')||''}catch(e){return ''}}
+  function syncGate(){var root=document.documentElement,loggedOut=!token();if(loggedOut){if((' '+root.className+' ').indexOf(' fv-web-logged-out ')<0){root.className=(root.className+' fv-web-logged-out').replace(/^\\s+|\\s+$/g,'')}}else{root.className=(' '+root.className+' ').replace(' fv-web-logged-out ',' ').replace(/^\\s+|\\s+$/g,'')}}
+  syncGate();
   function isMiniAppCall(input,init){
     if(!init||String(init.method||'GET').toUpperCase()!=='POST'){return false}
     var url=typeof input==='string'?input:(input&&input.url?input.url:'');
@@ -47,7 +51,7 @@ const adapter = `<script data-fv-web-adapter="1">(function(){
 html = html
   .replace("<title>FitValen</title>", "<title>FitValen Web</title>")
   .replace('<script src="https://telegram.org/js/telegram-web-app.js"></script>', "")
-  .replace("</head>", adapter + "</head>")
+  .replace("</head>", gateStyle + adapter + "</head>")
   .replace(
     "status.textContent='Abre desde Telegram';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Mini App</div><div class=\"big\" style=\"font-size:27px\">Sesión no disponible</div><div class=\"small\">Abre FitValen desde el botón del bot.</div></div>';return",
     "var webToken='';try{webToken=localStorage.getItem('fitvalen_web_session')||''}catch(ignore){}if(!webToken){status.textContent='Acceso privado';get('home').innerHTML='<div class=\"hero\"><div class=\"ey\">FitValen Web</div><div class=\"big\" style=\"font-size:27px\">Iniciar sesión</div><div class=\"small\">Acceso privado a FitValen.</div></div><div class=\"card\"><div class=\"fvField\"><label>Usuario</label><input class=\"input\" id=\"fvWebUser\" type=\"text\" autocomplete=\"username\" value=\"Dani\"></div><div class=\"fvField\" style=\"margin-top:10px\"><label>Contraseña</label><input class=\"input\" id=\"fvWebPass\" type=\"password\" autocomplete=\"current-password\" placeholder=\"••••••••\"></div><button class=\"actionbtn primary wide\" style=\"margin-top:12px\" id=\"fvWebLogin\">Entrar</button><div class=\"small\" id=\"fvWebLoginMsg\" style=\"margin-top:10px\"></div></div>';var loginBtn=get('fvWebLogin'),userInput=get('fvWebUser'),passInput=get('fvWebPass'),msg=get('fvWebLoginMsg');function doWebLogin(){if(!loginBtn||loginBtn.disabled){return}var u=String(userInput&&userInput.value||'').replace(/^\\s+|\\s+$/g,''),p=String(passInput&&passInput.value||'');if(!u||!p){if(msg){msg.textContent='Introduce usuario y contraseña.'}return}loginBtn.disabled=true;if(msg){msg.textContent='Comprobando…'}fetch('https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-auth',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({username:u,password:p})}).then(function(r){return r.text().then(function(t){var j;try{j=JSON.parse(t)}catch(e){throw new Error('Respuesta no válida')}if(!r.ok||!j.ok||!j.data||!j.data.token){if(j&&j.error==='too_many_attempts'){throw new Error('Demasiados intentos. Prueba de nuevo más tarde.')}throw new Error('Usuario o contraseña incorrectos.')}return j.data})}).then(function(d){try{localStorage.setItem('fitvalen_web_session',d.token);localStorage.setItem('fitvalen_web_session_expires',d.expires_at||'')}catch(e){}if(passInput){passInput.value=''}location.reload()}).catch(function(e){loginBtn.disabled=false;if(passInput){passInput.value=''}if(msg){msg.textContent=e&&e.message?e.message:String(e)}})}if(loginBtn){loginBtn.onclick=doWebLogin}if(passInput){passInput.onkeydown=function(e){if(e.key==='Enter'){doWebLogin()}}}return}initData='web-session';status.textContent='Web · conectado'"
@@ -67,4 +71,4 @@ const logout = `<script data-fv-web-logout="1">(function(){
 html = html.replace("</body>", logout + "</body>");
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated backend + automatic day start)");
+console.log("FitValen Web V1 built from miniapp source -> web/dist (authenticated backend + automatic day start + login nav gate)");
