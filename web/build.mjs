@@ -10,7 +10,17 @@ const out = resolve(here, "dist");
 await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 await cp(source, out, { recursive: true });
-await cp(resolve(here, "fv-web-foundation-v1.css"), resolve(out, "fv-web-foundation-v1.css"));
+
+/*
+ * Runtime visual contract:
+ * one Web stylesheet is emitted: fv-web-foundation-v1.css.
+ * Final QA rules live in a small source module and are concatenated at build
+ * time so the browser still receives a single visual owner.
+ */
+const foundationOutPath = resolve(out, "fv-web-foundation-v1.css");
+const foundationCss = await readFile(resolve(here, "fv-web-foundation-v1.css"), "utf8");
+const qaCss = await readFile(resolve(here, "fv-web-qa-v1.css"), "utf8");
+await writeFile(foundationOutPath, foundationCss + "\n\n" + qaCss, "utf8");
 
 /*
  * Web-only compatibility patches.
@@ -64,6 +74,20 @@ advanced = advanced.replace(
 if (advanced === advancedBefore) {
   throw new Error("FitValen Web build guard: progress nav binding signature changed");
 }
+
+/*
+ * Cached Progress data must not repaint the complete DOM every time the user
+ * revisits the tab. A forced refresh remains available through one explicit
+ * global hook used only by the top refresh button.
+ */
+const advancedProgressBefore = advanced;
+advanced = advanced.replace(
+  "function loadProgress(force){var now=Date.now();if(progressData&&!force&&now-progressLoadedAt<30000){renderProgress(progressData);return}request('progress_v2',{}).then(function(d){progressLoadedAt=Date.now();renderProgress(d)}).catch(function(e){notify(friendly(e))})}",
+  "function loadProgress(force){var now=Date.now(),root=document.getElementById('progress');if(progressData&&!force&&now-progressLoadedAt<30000){if(root&&root.querySelector('.fvAdvancedProgress')){return}renderProgress(progressData);return}request('progress_v2',{}).then(function(d){progressLoadedAt=Date.now();renderProgress(d)}).catch(function(e){notify(friendly(e))})}window.__fvLoadProgress=function(force){loadProgress(!!force)}"
+);
+if (advanced === advancedProgressBefore) {
+  throw new Error("FitValen Web build guard: progress loader signature changed");
+}
 await writeFile(advancedPath, advanced, "utf8");
 
 const enhancePath = resolve(out, "enhance-v2.js");
@@ -110,7 +134,7 @@ if (html === progressOwnerBefore) {
 const refreshBefore = html;
 html = html.replace(
   "refresh.onclick=function(){var key=currentTab,action=key==='work'?'workouts':key,renderer=key==='home'?renderHome:key==='diet'?renderDiet:key==='work'?renderWork:renderProgress;showSkeleton(key);load(action,key,renderer,true);haptic()};",
-  "refresh.onclick=function(){var key=currentTab;if(key==='progress'){var pb=document.querySelector('.nav button[data-tab=\"progress\"]');if(pb){pb.click()}haptic();return}var action=key==='work'?'workouts':key,renderer=key==='home'?renderHome:key==='diet'?renderDiet:renderWork;showSkeleton(key);load(action,key,renderer,true);haptic()};"
+  "refresh.onclick=function(){var key=currentTab;if(key==='progress'){if(window.__fvLoadProgress){window.__fvLoadProgress(true)}else{var pb=document.querySelector('.nav button[data-tab=\"progress\"]');if(pb){pb.click()}}haptic();return}var action=key==='work'?'workouts':key,renderer=key==='home'?renderHome:key==='diet'?renderDiet:renderWork;showSkeleton(key);load(action,key,renderer,true);haptic()};"
 );
 if (html === refreshBefore) {
   throw new Error("FitValen Web build guard: refresh handler signature changed");
@@ -129,7 +153,7 @@ const productionCss = [
   "advanced-v1.css",
   "exercise-note-v1.css",
   "fv-web-foundation-v1.css"
-].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=11">'}).join("");
+].map(function(x){return '<link rel="stylesheet" href="/'+x+'?web=12">'}).join("");
 
 const adapter = `<script data-fv-web-adapter="1">(function(){
   var WEB_API='https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api';
@@ -192,7 +216,7 @@ const productionLoader = `<script data-fv-web-production-loader="1">(function(){
       (function wait(){var s=document.querySelector('script[src*="workout-v2.js"]');if(s||tries>20){setTimeout(next,80);return}tries++;setTimeout(wait,25)})();
       return;
     }
-    var s=document.createElement('script');s.src='/'+file+'?web=11';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
+    var s=document.createElement('script');s.src='/'+file+'?web=12';s.setAttribute('data-fv-web-production','1');s.onload=next;s.onerror=next;document.body.appendChild(s)
   }
   next();
 })();</script>`;
@@ -223,5 +247,17 @@ const logout = `<script data-fv-web-logout="1">(function(){
 })();</script>`;
 html = html.replace("</body>", productionLoader + logout + "</body>");
 
+/* Build-time invariants: old Web visual layers must never return to runtime. */
+const forbiddenRuntimeLayers = [
+  "home-performance-v1.css","home-performance-v1.js","light-performance-v1.css",
+  "web-performance-v2.css","web-performance-v2.js","ux-polish-v3.css","ux-polish-v3.js",
+  "premium-product-v4.css","premium-product-v4.js","production-polish-v1.css","fullscreen-v1.css"
+];
+for (const layer of forbiddenRuntimeLayers) {
+  if (html.includes(layer)) {
+    throw new Error("FitValen Web build guard: forbidden runtime layer " + layer);
+  }
+}
+
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web V1 built -> Clean Foundation v1 + stable Progress");
+console.log("FitValen Web V1 built -> Final QA + stable Progress + single visual owner");
