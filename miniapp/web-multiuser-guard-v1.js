@@ -15,12 +15,10 @@
   function hideLegacyPersonalUi(){
     var quick=document.getElementById('quickMealsWrap');
     if(quick){quick.style.display='none'}
-    var goals=document.getElementById('fvGoalsCard');
-    if(goals){goals.style.display='none'}
   }
   var style=document.createElement('style');
   style.setAttribute('data-fv-web-multiuser-guard','1');
-  style.textContent='#quickMealsWrap,#fvGoalsCard{display:none!important}';
+  style.textContent='#quickMealsWrap{display:none!important}';
   document.head.appendChild(style);
   document.addEventListener('click',function(e){
     var t=e&&e.target&&e.target.closest?e.target.closest('.quickMealBtn'):null;
