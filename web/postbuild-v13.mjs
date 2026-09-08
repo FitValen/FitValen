@@ -7,7 +7,7 @@ const indexPath = resolve(here, "dist", "index.html");
 let html = await readFile(indexPath, "utf8");
 
 html = html
-  .replace(/\?web=12/g, "?web=16")
+  .replace(/\?web=12/g, "?web=17")
   .replaceAll("https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-api", "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-v2")
   .replaceAll("https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-day", "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-v2")
   .replaceAll("https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-weight", "https://hhlxdzehiapvolyptfth.supabase.co/functions/v1/fitvalen-web-v2")
@@ -47,11 +47,11 @@ await writeFile(enhancePath, enhance, "utf8");
 
 html = html.replace(
   "</body>",
-  '<script src="/web-multiuser-guard-v1.js?web=16" data-fv-web-multiuser-guard="1"></script></body>'
+  '<script src="/web-multiuser-guard-v1.js?web=17" data-fv-web-multiuser-guard="1"></script><script src="/web-admin-v1.js?web=17" data-fv-web-admin="1"></script></body>'
 );
-if (!html.includes("web-multiuser-guard-v1.js")) {
-  throw new Error("FitValen Web guard: multiuser UI guard missing");
+if (!html.includes("web-multiuser-guard-v1.js") || !html.includes("web-admin-v1.js")) {
+  throw new Error("FitValen Web guard: multiuser/admin runtime missing");
 }
 
 await writeFile(indexPath, html, "utf8");
-console.log("FitValen Web multiuser v2 · owner-safe UI guard · cache web=16");
+console.log("FitValen Web multiuser v2 · admin user manager · cache web=17");
