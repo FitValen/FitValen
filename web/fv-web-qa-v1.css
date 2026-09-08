@@ -57,6 +57,11 @@ html.fv-web #diet .quickMealBtn.quickMealLeaving{
   pointer-events:none!important;
   animation:fvQuickMealExit .22s cubic-bezier(.2,.8,.2,1) forwards!important;
 }
+/* enhance-v2 marca las comidas consumidas con style.display='none'.
+   Esta regla debe ganar al display:flex!important del componente. */
+html.fv-web #diet .quickMealBtn[style*="display: none"]{
+  display:none!important;
+}
 
 /* Contención: ninguna columna dinámica debe empujar el viewport. */
 html.fv-web .sectionhead>*,
