@@ -1,12 +1,12 @@
 (function(){
   var meals=[
-    {icon:'🥤',name:'Desayuno',desc:'Whey + frutos secos + leche 0%',kcal:330,slot:'desayuno',variant:'quick_1'},
-    {icon:'🍳',name:'Almuerzo',desc:'Claras + huevo + fresas',kcal:169,slot:'almuerzo',variant:'quick_2'},
-    {icon:'🍗',name:'Comida',desc:'Pollo + verdura verde',kcal:239,slot:'comida',variant:'quick_3'},
-    {icon:'🥛',name:'Merienda',desc:'Yogur + Whey + frutos secos',kcal:326,slot:'merienda',variant:'quick_4'},
-    {icon:'🌙',name:'Cena',desc:'Pollo + verdura verde',kcal:239,slot:'cena',variant:'quick_5'},
+    {icon:'🥤',name:'Desayuno',desc:'40 g proteína + 15 g frutos secos tostados + 30 g harina de avena + 250 ml leche 0%',kcal:460,slot:'desayuno',variant:'quick_1'},
+    {icon:'🍳',name:'Almuerzo',desc:'200 g claras + 1 huevo + 30 g harina de avena + 3 fresas',kcal:307,slot:'almuerzo',variant:'quick_2'},
+    {icon:'🍗',name:'Comida',desc:'200 g pechuga + 140 g verdura asada + 180 g patata',kcal:403,slot:'comida',variant:'quick_3'},
+    {icon:'🥛',name:'Merienda',desc:'250 g yogur griego ligero + 20 g proteína + 15 g frutos secos',kcal:326,slot:'merienda',variant:'quick_4'},
+    {icon:'🌙',name:'Cena',desc:'200 g hamburguesa de pollo + 140 g verdura asada + 2 tortitas de arroz',kcal:448,slot:'cena',variant:'quick_5'},
     {icon:'🍍',name:'Post-entreno',desc:'150 g de piña',kcal:87,slot:'post-entreno',variant:'quick_6'},
-    {icon:'🫐',name:'Postre',desc:'Queso batido + arándanos',kcal:118,slot:'postre',variant:'quick_7'}
+    {icon:'🫐',name:'Postre',desc:'200 g queso fresco batido 0% + 50 g arándanos',kcal:118,slot:'postre',variant:'quick_7'}
   ];
   var mealInfo={'ayunas':['🌅','Ayunas'],'desayuno':['🍳','Desayuno'],'almuerzo':['🥪','Almuerzo'],'comida':['🍽️','Comida'],'merienda':['🥛','Merienda'],'post-entreno':['🍍','Post-entreno'],'cena':['🌙','Cena'],'postre':['🍓','Postre'],'snacks':['🍫','Snacks'],'salsas':['🥫','Salsas'],'antes de dormir':['💊','Antes de dormir']};
   var hiddenQuick={};
