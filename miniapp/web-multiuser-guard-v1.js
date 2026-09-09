@@ -76,7 +76,7 @@
   installWorkoutAutoFinish();
 
   var user=webUsername();
-  if(user==='dani'){return}
+  if(user==='dani'||user==='danitest'){return}
   function hideLegacyPersonalUi(){
     var quick=document.getElementById('quickMealsWrap');
     if(quick){quick.style.display='none'}
