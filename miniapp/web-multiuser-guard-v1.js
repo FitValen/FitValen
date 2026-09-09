@@ -76,9 +76,9 @@
     function syncHydration(){
       var footer=document.querySelector('#fvGoalsCard .fvGoalFooter');
       if(!footer){return}
-      footer.style.display='flex';
+      if(footer.style.display!=='flex'){footer.style.display='flex'}
       var value=footer.querySelector('b');
-      if(value){value.textContent='4 L de agua'}
+      if(value&&value.textContent!=='4 L de agua'){value.textContent='4 L de agua'}
     }
     syncHydration();
     if(window.MutationObserver){new MutationObserver(syncHydration).observe(document.documentElement,{childList:true,subtree:true})}
