@@ -72,11 +72,24 @@
       return response;
     };
   }
+  function mirrorDaniCloneUi(){
+    function syncHydration(){
+      var footer=document.querySelector('#fvGoalsCard .fvGoalFooter');
+      if(!footer){return}
+      footer.style.display='flex';
+      var value=footer.querySelector('b');
+      if(value){value.textContent='4 L de agua'}
+    }
+    syncHydration();
+    if(window.MutationObserver){new MutationObserver(syncHydration).observe(document.documentElement,{childList:true,subtree:true})}
+    else{setInterval(syncHydration,750)}
+  }
 
   installWorkoutAutoFinish();
 
   var user=webUsername();
-  if(user==='dani'||user==='danitest'){return}
+  if(user==='dani'){return}
+  if(user==='danitest'){mirrorDaniCloneUi();return}
   function hideLegacyPersonalUi(){
     var quick=document.getElementById('quickMealsWrap');
     if(quick){quick.style.display='none'}
