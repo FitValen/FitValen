@@ -46,3 +46,43 @@
   function loadSafeArea(){if(document.querySelector('script[src*="fullscreen-safe-v2.js"]')){return}var s=document.createElement('script');s.src='/fullscreen-safe-v2.js?v=e46ff7a';s.setAttribute('data-fv-safearea','1');document.body.appendChild(s)}
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadSafeArea)}else{loadSafeArea()}
 })();
+
+
+(function(){
+  if(window.__fvButtonPressFeedbackV1){return}
+  window.__fvButtonPressFeedbackV1=true;
+  function installStyle(){
+    if(document.getElementById('fvButtonPressFeedbackStyle')){return}
+    var style=document.createElement('style');
+    style.id='fvButtonPressFeedbackStyle';
+    style.textContent='button.fvButtonPressed{transform:scale(.965)!important;filter:brightness(1.16)!important;box-shadow:0 0 0 2px rgba(103,228,147,.34),0 7px 18px rgba(103,228,147,.13)!important;transition:transform .06s ease,filter .06s ease,box-shadow .06s ease!important}';
+    document.head.appendChild(style);
+  }
+  function flash(button){
+    if(!button||button.disabled){return}
+    button.classList.remove('fvButtonPressed');
+    void button.offsetWidth;
+    button.classList.add('fvButtonPressed');
+    clearTimeout(button.__fvPressTimer);
+    button.__fvPressTimer=setTimeout(function(){
+      button.classList.remove('fvButtonPressed');
+    },145);
+  }
+  function buttonFromEvent(e){
+    var t=e&&e.target;
+    return t&&t.closest?t.closest('button'):null;
+  }
+  function install(){
+    installStyle();
+    document.addEventListener('pointerdown',function(e){
+      var b=buttonFromEvent(e);
+      if(b){flash(b)}
+    },true);
+    document.addEventListener('keydown',function(e){
+      if(e.key!=='Enter'&&e.key!==' '){return}
+      var b=buttonFromEvent(e);
+      if(b){flash(b)}
+    },true);
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',install)}else{install()}
+})();
