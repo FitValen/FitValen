@@ -94,7 +94,7 @@ const enhancePath = resolve(out, "enhance-v2.js");
 let enhance = await readFile(enhancePath, "utf8");
 const enhanceBefore = enhance;
 enhance = enhance.replace(
-  /\n\(function\(\)\{\n  function loadSafeArea\(\)[\s\S]*?\n\}\)\(\);\s*$/,
+  /\n\(function\(\)\{\n  function loadSafeArea\(\)[\s\S]*?\n  if\(document\.readyState==='loading'\)\{document\.addEventListener\('DOMContentLoaded',loadSafeArea\)\}else\{loadSafeArea\(\)\}\n\}\)\(\);\n?/,
   "\n"
 );
 if (enhance === enhanceBefore) {
